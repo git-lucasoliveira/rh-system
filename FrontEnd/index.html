@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StarPeople - Painel</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="logo">
+            starpeople<span style="color:var(--accent);">.</span> <span class="badge-beta">LITE</span>
+        </div>
+        <div class="user-area">
+            <span>Olá, <strong>Gestor</strong></span>
+            <button onclick="logout()" class="btn-sair">Sair</button>
+        </div>
+    </nav>
+
+    <main class="main-container">
+        
+        <div class="page-title">
+            <h1>Painel de Controle</h1>
+            <p>Gerencie seus colaboradores com agilidade.</p>
+        </div>
+
+        <div class="dashboard-grid">
+            
+            <div class="card">
+                <div class="icon-box">👥</div>
+                <h2>Colaboradores</h2>
+                <div class="number" id="contador-funcionarios">--</div> 
+                <p>Ativos na base de dados</p>
+                <a href="funcionarios/lista.html" class="btn-card btn-primary">Acessar Módulo</a>
+            </div>
+
+            <div class="card">
+                <div class="icon-box">🏢</div>
+                <h2>Setores</h2>
+                <div class="number">4</div>
+                <p>Departamentos estruturados</p>
+                <button onclick="alert('Em breve')" class="btn-card">Gerenciar</button>
+            </div>
+
+            <div class="card">
+                <div class="icon-box">💼</div>
+                <h2>Cargos</h2>
+                <div class="number">6</div>
+                <p>Funções cadastradas</p>
+                <button onclick="alert('Em breve')" class="btn-card">Gerenciar</button>
+            </div>
+
+        </div>
+    </main>
+
+    <footer>
+        © 2025 StarPeople System | Tecnologia Java Spring Boot
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            try {
+                const response = await fetch('http://localhost:8080/api/funcionarios', {
+                    headers: { 'Authorization': 'Bearer ' + token }
+                });
+                
+                if (response.ok) {
+                    const lista = await response.json();
+                    document.getElementById('contador-funcionarios').innerText = lista.length;
+                }
+            } catch (e) {
+                console.log("Erro ao carregar contadores");
+                document.getElementById('contador-funcionarios').innerText = "0";
+            }
+        });
+
+        function logout() {
+            localStorage.removeItem('token');
+            window.location.href = 'login.html';
+        }
+    </script>
+
+</body>
+</html>

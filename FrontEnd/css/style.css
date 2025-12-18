@@ -1,0 +1,134 @@
+/* =========================================
+   THEME: Starcard Enterprise
+   ========================================= */
+:root {
+    --bg-deep: #130420;
+    --bg-card: rgba(37, 10, 59, 0.7);
+    --accent: #a800f0;
+    --accent-hover: #c933ff;
+    --text-main: #ffffff;
+    --text-muted: #e0cffc;
+    --border-light: rgba(168, 0, 240, 0.4);
+    --white: #ffffff;
+    --danger: #ff4757;
+}
+
+/* Reset básico (Essencial para a Home sem Bootstrap) */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    background-color: var(--bg-deep);
+    color: var(--text-main);
+    font-family: 'Poppins', 'Segoe UI', sans-serif;
+    min-height: 100vh;
+    background-image: radial-gradient(circle at 10% 20%, #2e0c4b 0%, var(--bg-deep) 80%);
+    background-attachment: fixed;
+    display: flex; flex-direction: column;
+}
+
+/* =========================================
+   PARTE 1: ESTILOS DA HOME (SEM BOOTSTRAP)
+   ========================================= */
+
+.navbar {
+    background-color: rgba(19, 4, 32, 0.95);
+    border-bottom: 1px solid var(--border-light);
+    padding: 1rem 2rem;
+    display: flex; justify-content: space-between; align-items: center;
+}
+
+.logo { font-size: 1.5rem; font-weight: 700; color: var(--white); }
+.badge-beta { background: rgba(112, 161, 255, 0.2); color: #70a1ff; font-size: 0.7rem; padding: 2px 8px; border-radius: 12px; font-weight: 600; vertical-align: middle; }
+
+.user-area { display: flex; align-items: center; gap: 20px; font-size: 0.9rem; }
+.btn-sair { background: transparent; border: 1px solid var(--danger); color: var(--danger); padding: 6px 16px; border-radius: 20px; cursor: pointer; transition: 0.3s; }
+.btn-sair:hover { background-color: var(--danger); color: white; }
+
+.main-container { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 2rem; }
+
+.page-title { text-align: center; margin-bottom: 3rem; }
+.page-title h1 { font-size: 2.8rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--white); }
+.page-title p { color: var(--text-muted); font-size: 1.1rem; }
+
+/* O Grid que estava quebrando com Bootstrap */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    width: 100%;
+    max-width: 1200px;
+}
+
+.card {
+    background-color: var(--bg-card);
+    border-radius: 20px;
+    padding: 2.5rem 2rem;
+    text-align: center;
+    border: 1px solid var(--border-light);
+    display: flex; flex-direction: column; align-items: center; justify-content: space-between;
+    height: 340px;
+    transition: transform 0.3s;
+    /* Correção para caso o Bootstrap tente invadir */
+    margin-bottom: 0; 
+}
+.card:hover { transform: translateY(-8px); border-color: var(--accent); box-shadow: 0 10px 30px rgba(0,0,0,0.4); }
+
+.icon-box { background-color: rgba(168, 0, 240, 0.1); width: 70px; height: 70px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; margin-bottom: 1rem; color: var(--accent); }
+
+.card h2 { font-size: 1.4rem; font-weight: 600; color: var(--white); }
+.number { font-size: 3rem; font-weight: 700; color: var(--white); margin: 0.5rem 0; }
+.card p { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 2rem; }
+
+/* Botões Customizados */
+.btn-card {
+    background: transparent; border: 2px solid var(--white); color: var(--white);
+    padding: 12px 0; width: 100%; border-radius: 30px; text-decoration: none; font-weight: 600; transition: 0.3s; text-transform: uppercase; font-size: 0.85rem; display: block; cursor: pointer;
+}
+.btn-card:hover { background: var(--white); color: var(--bg-deep); }
+.btn-primary { background-color: var(--accent) !important; border-color: var(--accent) !important; color: white !important; }
+
+footer { text-align: center; padding: 2rem; color: var(--text-muted); font-size: 0.8rem; margin-top: auto; }
+
+
+/* =========================================
+   PARTE 2: CORREÇÕES QUANDO O BOOTSTRAP ESTÁ PRESENTE
+   (Isso só afeta lista.html e formulario.html)
+   ========================================= */
+
+/* Forçar background escuro nos Cards do Bootstrap */
+.card-glass {
+    background-color: var(--bg-card) !important;
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--border-light);
+    border-radius: 16px;
+}
+
+/* Inputs Escuros */
+.form-control, .form-select {
+    background-color: rgba(0, 0, 0, 0.3) !important; 
+    border: 1px solid var(--border-light) !important;
+    color: var(--white) !important;
+    border-radius: 8px !important;
+    padding: 10px 15px !important;
+}
+.form-control:focus, .form-select:focus {
+    border-color: var(--accent) !important;
+    box-shadow: 0 0 0 3px rgba(168, 0, 240, 0.25) !important;
+}
+::placeholder { color: rgba(255, 255, 255, 0.5) !important; }
+
+/* Tabela Transparente */
+.table { --bs-table-bg: transparent !important; --bs-table-color: var(--text-muted) !important; margin-bottom: 0 !important; }
+.table thead th { border-bottom: 2px solid var(--accent) !important; color: var(--white); padding: 15px; }
+.table tbody td { border-bottom: 1px solid rgba(255,255,255,0.05); padding: 15px; vertical-align: middle; }
+.table tbody tr:hover { background-color: rgba(168, 0, 240, 0.15); }
+
+/* Botão Star Primary (Override Bootstrap) */
+.btn-star-primary {
+    background-color: var(--accent); color: white; border: none; padding: 8px 20px; border-radius: 8px; font-weight: 600; text-decoration: none;
+}
+.btn-star-primary:hover { background-color: var(--accent-hover); color: white; }
+
+/* Badges Status */
+.badge-status-ativo { background: rgba(46, 213, 115, 0.15); color: #2ed573; border: 1px solid rgba(46, 213, 115, 0.3); padding: 5px 12px; border-radius: 20px; font-size: 0.75rem;}
+.badge-status-inativo { background: rgba(255, 71, 87, 0.15); color: #ff4757; border: 1px solid rgba(255, 71, 87, 0.3); padding: 5px 12px; border-radius: 20px; font-size: 0.75rem;}
