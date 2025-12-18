@@ -1,0 +1,281 @@
+/* Funcionarios.css - Versão Premium Visual */
+
+/* Importando fonte profissional (Inter) do Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --primary-glow: #d500f9;
+  --bg-dark: #0f0f1a;
+  --bg-panel: #151020;
+  --border-color: rgba(255, 255, 255, 0.08);
+}
+
+/* --- Layout Principal --- */
+.page-container {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  /* Gradiente mais profundo e rico */
+  background: radial-gradient(circle at top right, #2e1065 0%, #0f0f1a 60%);
+  color: #f8fafc;
+  font-family: 'Inter', sans-serif; /* Fonte atualizada */
+  padding: 1.5rem 2rem;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+/* --- Cabeçalho --- */
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+  margin-bottom: 1.5rem;
+}
+
+.header-title h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #fff;
+  margin: 0;
+  letter-spacing: -0.5px;
+  background: linear-gradient(90deg, #fff, #d8b4fe); /* Texto com gradiente */
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.header-title span {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #94a3b8;
+  letter-spacing: 0.5px;
+}
+
+/* --- Botões Refinados --- */
+.btn-group { display: flex; gap: 0.8rem; }
+
+.star-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0 1.2rem;
+  border-radius: 8px; /* Cantos mais arredondados */
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+  height: 40px;
+  font-family: 'Inter', sans-serif;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #aa00ff 0%, #d500f9 100%);
+  color: white;
+  box-shadow: 0 4px 15px rgba(170, 0, 255, 0.3);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-size: 0.75rem;
+}
+
+.btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(170, 0, 255, 0.5);
+}
+
+.btn-outline {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #cbd5e1;
+}
+
+.btn-outline:hover {
+  border-color: #fff;
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+}
+
+/* --- Barra de Filtros (Ajustada) --- */
+.filter-bar {
+  display: grid;
+  /* ANTES: 2fr 1fr 1fr auto (O primeiro campo ocupava dobro do espaço)
+     AGORA: 1.2fr 1fr 1fr auto (Mais equilibrado)
+  */
+  grid-template-columns: 1.2fr 1fr 1fr auto; 
+  gap: 1.5rem;
+  align-items: end;
+  
+  background: rgba(20, 15, 35, 0.6);
+  backdrop-filter: blur(12px);
+  padding: 1.2rem 1.5rem;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  margin-bottom: 1.5rem;
+  flex-shrink: 0;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+}
+
+/* Adicionei esta regra para telas menores (Safety Net) */
+@media (max-width: 1024px) {
+  .filter-bar {
+    /* Se a tela for pequena, quebra em duas linhas */
+    grid-template-columns: 1fr 1fr; 
+    gap: 1rem;
+  }
+  
+  /* O botão passa a ocupar a largura total na linha de baixo em telas pequenas */
+  .filter-bar button {
+    grid-column: span 2;
+  }
+}
+
+.filter-group { display: flex; flex-direction: column; gap: 0.5rem; }
+
+.filter-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #a78bfa; /* Roxo claro para labels */
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+
+.star-input {
+  width: 100%;
+  height: 42px;
+  padding: 0 1rem;
+  background-color: rgba(15, 23, 42, 0.8);
+  border: 1px solid #334155;
+  border-radius: 8px;
+  color: white;
+  font-size: 0.9rem;
+  font-family: 'Inter', sans-serif;
+  transition: 0.2s;
+}
+
+.star-input:focus {
+  outline: none;
+  border-color: #d500f9;
+  background-color: rgba(15, 23, 42, 1);
+  box-shadow: 0 0 0 3px rgba(213, 0, 249, 0.15);
+}
+
+/* --- Tabela Premium --- */
+.table-wrapper {
+  flex: 1;
+  overflow: hidden;
+  background-color: rgba(20, 15, 35, 0.5);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  flex-direction: column;
+}
+
+.scroll-area {
+  overflow-y: auto;
+  flex: 1;
+  scrollbar-width: thin;
+  scrollbar-color: #4a148c #0f0f1a;
+}
+
+.star-table { width: 100%; border-collapse: separate; border-spacing: 0; }
+
+.star-table thead {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: #1a0b2e; /* Fundo sólido para cobrir rolagem */
+}
+
+.star-table th {
+  color: #d8b4fe;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  padding: 1.2rem 1.5rem;
+  text-align: left;
+  font-weight: 700;
+  letter-spacing: 1px;
+  border-bottom: 1px solid rgba(167, 139, 250, 0.1);
+}
+
+.star-table td {
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+  color: #cbd5e1;
+  font-size: 0.85rem;
+  vertical-align: middle;
+}
+
+.star-table tr:hover td {
+  background-color: rgba(213, 0, 249, 0.03);
+  color: #fff;
+}
+
+/* Nome principal destacado */
+.col-primary {
+  display: flex;
+  flex-direction: column;
+}
+.text-bold { font-weight: 600; color: #fff; font-size: 0.9rem; }
+.text-sub { font-size: 0.75rem; color: #64748b; margin-top: 2px; }
+
+/* --- Badges e Chips --- */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Setor: Visual "Tech" (borda sutil + ícone) */
+.badge-setor {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #e2e8f0;
+}
+
+/* Status: Visual "Neon" */
+.badge-ativo {
+  background: rgba(0, 200, 83, 0.1);
+  color: #00e676;
+  border: 1px solid rgba(0, 200, 83, 0.2);
+  box-shadow: 0 0 8px rgba(0, 200, 83, 0.1);
+}
+
+.status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: currentColor;
+}
+
+/* Ações */
+.actions-cell {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.action-btn {
+  background: transparent;
+  border: 1px solid transparent;
+  color: #64748b;
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 6px;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.action-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.1);
+}

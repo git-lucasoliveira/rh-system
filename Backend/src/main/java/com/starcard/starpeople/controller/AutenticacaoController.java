@@ -1,3 +1,4 @@
+// language: java
 package com.starcard.starpeople.controller;
 
 import com.starcard.starpeople.dto.DadosAutenticacao;
@@ -21,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AutenticacaoController {
 
     @Autowired
-    private AuthenticationManager manager; // O "Gerente" de login do Spring
+    private AuthenticationManager manager;
 
     @Autowired
     private TokenService tokenService;
@@ -30,44 +31,40 @@ public class AutenticacaoController {
     private UsuarioRepository repository;
 
     @Autowired
-    private PasswordEncoder passwordEncoder; // O Criptografador
+    private PasswordEncoder passwordEncoder;
 
-    // 1. FAZER LOGIN
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody @Valid DadosAutenticacao dados) {
         try {
-            // 1. Cria o token com os dados que chegaram (login/senha texto puro)
+            // Tenta criar o token de autenticação
             var authenticationToken = new UsernamePasswordAuthenticationToken(dados.login(), dados.senha());
 
-            // 2. Tenta autenticar (Aqui é onde deve estar explodindo)
+            // Tenta autenticar no banco
             var authentication = manager.authenticate(authenticationToken);
 
-            // 3. Se passou, gera o token JWT
+            // Se passar, gera o token JWT
             var tokenJWT = tokenService.gerarToken((Usuario) authentication.getPrincipal());
 
             return ResponseEntity.ok(new DadosTokenJWT(tokenJWT));
 
         } catch (Exception e) {
-            // ISSO VAI NOS SALVAR: Imprime o erro real no console
+            // --- AQUI ESTÁ A CORREÇÃO DE DEBUG ---
+            // Imprime o erro real no terminal do Java para sabermos o que é
             e.printStackTrace();
-            return ResponseEntity.badRequest().body("Erro na autenticação: " + e.getMessage());
+
+            // Devolve o erro para o Frontend ver também (opcional, mas ajuda no teste)
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
-    // 2. REGISTRAR USUÁRIO (Para podermos criar o primeiro acesso)
-    // ATENÇÃO: Em produção, essa rota deve ser bloqueada ou protegida
     @PostMapping("/registrar")
-    public ResponseEntity registrar(@RequestBody @Valid DadosAutenticacao dados) {
+    public ResponseEntity<?> registrar(@RequestBody @Valid DadosAutenticacao dados) {
         if (repository.existsByLogin(dados.login())) {
             return ResponseEntity.badRequest().body("Usuário já existe!");
         }
-
-        // Criptografa a senha antes de salvar
         String senhaCriptografada = passwordEncoder.encode(dados.senha());
-
         Usuario novoUsuario = new Usuario(dados.login(), senhaCriptografada, "ADMIN");
         repository.save(novoUsuario);
-
-        return ResponseEntity.ok().build();
+        return ResponseEntity.status(201).build();
     }
 }

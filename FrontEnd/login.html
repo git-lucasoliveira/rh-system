@@ -41,33 +41,63 @@
         
         form.addEventListener('submit', async (e) => {
             e.preventDefault(); 
-            const login = document.getElementById('login').value;
-            const senha = document.getElementById('senha').value;
+            
+            // 1. Capturar e limpar espaços
+            const loginInput = document.getElementById('login').value.trim();
+            const senhaInput = document.getElementById('senha').value.trim();
             const btn = form.querySelector('button');
 
+            // 2. Preparar o pacote de dados (Payload)
+            // AGORA ESTÁ CERTO: As chaves batem com o DadosAutenticacao.java
+            const payload = { 
+                login: loginInput, // O Java espera 'login'
+                senha: senhaInput  // O Java espera 'senha' (e não password!)
+            };
+
+            console.log("--- Tentativa de Login ---");
+            console.log("JSON enviado:", JSON.stringify(payload));
+
             try {
+                // Feedback visual
                 btn.innerText = "VALIDANDO...";
                 btn.style.opacity = "0.7";
+                btn.disabled = true;
 
                 const response = await fetch('http://localhost:8080/auth/login', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ login, senha })
+                    body: JSON.stringify(payload)
                 });
+
+                console.log("Status do servidor:", response.status);
 
                 if (response.ok) {
                     const dados = await response.json();
+                    console.log("Login OK! Token recebido.");
+                    
+                    // Guarda o token e redireciona
                     localStorage.setItem('token', dados.token);
                     window.location.href = 'index.html';
                 } else {
-                    document.getElementById('msgErro').style.display = 'block';
-                    btn.innerText = "ENTRAR NO SISTEMA";
-                    btn.style.opacity = "1";
+                    // Se o servidor devolver 403, as credenciais estão erradas
+                    console.warn("Login falhou.");
+                    mostrarErro();
                 }
             } catch (error) {
+                console.error("Erro de conexão:", error);
                 alert("Erro de conexão. Verifique se o Backend Java está rodando.");
+                resetarBotao();
+            }
+
+            function mostrarErro() {
+                document.getElementById('msgErro').style.display = 'block';
+                resetarBotao();
+            }
+
+            function resetarBotao() {
                 btn.innerText = "ENTRAR NO SISTEMA";
                 btn.style.opacity = "1";
+                btn.disabled = false;
             }
         });
     </script>

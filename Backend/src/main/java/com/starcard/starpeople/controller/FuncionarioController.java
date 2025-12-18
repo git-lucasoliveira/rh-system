@@ -1,6 +1,5 @@
 package com.starcard.starpeople.controller;
 
-import com.starcard.starpeople.dto.FuncionarioDTO;
 import com.starcard.starpeople.model.Funcionario;
 import com.starcard.starpeople.service.CargoService;
 import com.starcard.starpeople.service.FuncionarioService;
@@ -18,6 +17,8 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import com.starcard.starpeople.dto.FuncionarioDTO;
+
 
 import java.io.ByteArrayInputStream;
 

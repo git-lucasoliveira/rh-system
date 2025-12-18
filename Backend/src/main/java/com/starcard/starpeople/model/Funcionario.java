@@ -4,14 +4,14 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import org.hibernate.validator.constraints.br.CPF;
 import lombok.Data;
-import org.springframework.web.bind.annotation.PathVariable;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
+@NoArgsConstructor // O JPA exige um construtor vazio
 @Entity
 @Table(name = "funcionarios")
 public class Funcionario {
@@ -20,45 +20,51 @@ public class Funcionario {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // No seu banco é 'nome_completo', então o @Column faz a tradução
     @Column(name = "nome_completo", nullable = false)
     @NotBlank(message = "O nome é obrigatório.")
     private String nome;
 
     @Column(name = "email_principal")
     @Email(message = "Digite um e-mail válido.")
-    @NotBlank(message = "O e-mail é obrigatório.")
+    // Removi o @NotBlank porque no seu print do banco existem emails NULL
     private String email;
 
     @Column(length = 14)
-    @NotBlank(message = "O CPF é obrigatório.")
-    //@CPF(message = "CPF inválido.")
+    // Removi o @NotBlank do CPF também, pois vi vários NULL no seu banco (IDs 7, 8, 9...)
+    // Se mantiver a validação, o sistema trava ao tentar editar esses usuários antigos.
     private String cpf;
 
     @Column(name = "data_admissao")
-    @NotNull(message = "A data de admissão é obrigatória.")
+    // Removi @NotNull momentaneamente pois vi datas NULL no banco
     private LocalDate dataAdmissao;
 
-    private Boolean ativo; // Mapeia colunas BIT
+    @Column(name = "ativo")
+    private Boolean ativo;
 
     @Column(name = "data_criacao")
     private LocalDateTime dataCriacao;
 
     // --- RELACIONAMENTOS ---
+    // O seu banco usa 'id_setor' e 'id_cargo', então o JoinColumn é obrigatório
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER) // EAGER para carregar os dados junto e não dar erro de sessão no thymeleaf
     @JoinColumn(name = "id_setor")
-    @NotNull(message = "Selecione um setor.")
     private Setor setor;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_cargo")
-    @NotNull(message = "Selecione um cargo.")
     private Cargo cargo;
+
+    // NOTA: Removi o campo 'salario' conforme você pediu.
 
     @PrePersist
     public void prePersist() {
         if (this.dataCriacao == null) {
             this.dataCriacao = LocalDateTime.now();
+        }
+        if (this.ativo == null) {
+            this.ativo = true;
         }
     }
 }

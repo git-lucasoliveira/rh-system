@@ -13,24 +13,26 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @Entity
-@Table(name = "usuarios")
+@Table(name = "usuarios") // Confirme se a tabela é 'usuarios' mesmo
 public class Usuario implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @Column(name = "login", nullable = false, unique = true)
     private String login;
 
-    @Column(nullable = false)
+    @Column(name = "senha", nullable = false)
     private String senha;
 
+    @Column(name = "perfil") // Se no banco for 'id_perfil', isso vai dar erro. Assumindo que é String.
     private String perfil;
 
+    @Column(name = "ativo")
     private Boolean ativo = true;
 
-    // Construtor auxiliar para facilitar a criação manual
+    // Construtor auxiliar para testes ou carga de dados
     public Usuario(String login, String senha, String perfil) {
         this.login = login;
         this.senha = senha;
@@ -38,32 +40,31 @@ public class Usuario implements UserDetails {
         this.ativo = true;
     }
 
-    // --- MÉTODOS OBRIGATÓRIOS DE SEGURANÇA (UserDetails) ---
+    // --- MÉTODOS OBRIGATÓRIOS DO SPRING SECURITY ---
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         if ("SUPERADMIN".equalsIgnoreCase(this.perfil)) {
             return List.of(
-                    new SimpleGrantedAuthority("ROLE_SUPERADMIN"), // Para coisas exclusivas
-                    new SimpleGrantedAuthority("ROLE_ADMIN"),      // Para gestão geral
+                    new SimpleGrantedAuthority("ROLE_SUPERADMIN"),
+                    new SimpleGrantedAuthority("ROLE_ADMIN"),
                     new SimpleGrantedAuthority("ROLE_USER")
             );
         }
         else if ("TI".equalsIgnoreCase(this.perfil)) {
             return List.of(
-                    new SimpleGrantedAuthority("ROLE_TI"),    // <--- ADICIONAMOS ISSO (Para os badges e menu pai)
-                    new SimpleGrantedAuthority("ROLE_ADMIN"), // <--- Permite acessar tela de usuários
+                    new SimpleGrantedAuthority("ROLE_TI"),
+                    new SimpleGrantedAuthority("ROLE_ADMIN"),
                     new SimpleGrantedAuthority("ROLE_USER")
             );
         }
         else if ("RH".equalsIgnoreCase(this.perfil)) {
             return List.of(
-                    new SimpleGrantedAuthority("ROLE_RH"),    // <--- ADICIONAMOS ISSO
+                    new SimpleGrantedAuthority("ROLE_RH"),
                     new SimpleGrantedAuthority("ROLE_USER")
             );
         }
-
-        // Padrão
+        // Perfil padrão caso não venha nada ou seja desconhecido
         return List.of(new SimpleGrantedAuthority("ROLE_USER"));
     }
 
@@ -94,7 +95,7 @@ public class Usuario implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        // Se o campo ativo for null, considera false (inativo) por segurança
+        // Garante que não dá NullPointerException se ativo for nulo
         return this.ativo != null && this.ativo;
     }
 }

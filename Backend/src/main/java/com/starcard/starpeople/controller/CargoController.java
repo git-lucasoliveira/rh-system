@@ -1,14 +1,13 @@
+// src/main/java/com/starcard/starpeople/controller/CargoController.java
 package com.starcard.starpeople.controller;
 
 import com.starcard.starpeople.model.Cargo;
 import com.starcard.starpeople.service.CargoService;
-import com.starcard.starpeople.service.SetorService;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/cargos")
@@ -16,7 +15,7 @@ public class CargoController {
 
     private final CargoService cargoService;
 
-    public CargoController(CargoService cargoService, SetorService setorService) {
+    public CargoController(CargoService cargoService) {
         this.cargoService = cargoService;
     }
 
@@ -29,12 +28,14 @@ public class CargoController {
     @GetMapping("/novo")
     public String abrirFormulario(Model model) {
         model.addAttribute("cargo", new Cargo());
-
         return "cargos/formulario";
     }
 
     @PostMapping("/salvar")
-    public String salvarCargo(Cargo cargo) {
+    public String salvarCargo(@ModelAttribute("cargo") @Valid Cargo cargo, BindingResult result, Model model) {
+        if (result.hasErrors()) {
+            return "cargos/formulario";
+        }
         cargoService.salvar(cargo);
         return "redirect:/cargos";
     }
