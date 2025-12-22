@@ -45,7 +45,7 @@ public class SecurityConfigurations {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/api/auth/**", "/api/login").permitAll()
+                        .requestMatchers("/api/auth/**", "/api/login", "api/funcionarios").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class);
@@ -87,7 +87,7 @@ public class SecurityConfigurations {
     @Bean
     public CorsConfigurationSource apiCorsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of(frontendOrigin, "http://localhost:5173", "http://localhost:3000")); // Adicionei portas comuns de React
+        config.setAllowedOrigins(List.of(frontendOrigin, "http://127.0.0.1:5500"));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("Authorization", "Content-Type", "Accept", "X-Requested-With"));
         config.setExposedHeaders(List.of("Authorization"));
