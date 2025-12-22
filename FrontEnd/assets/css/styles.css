@@ -296,3 +296,20 @@ footer {
     padding-top: 2rem;
     text-align: center;
 }
+
+/* Garante que o card não encolha demais */
+.card-dashboard {
+    transition: transform 0.2s;
+}
+
+.card-dashboard:hover {
+    transform: translateY(-5px); /* Efeito de elevação suave */
+}
+
+/* Ajuste fino para telas menores */
+@media (max-width: 768px) {
+    .card-title {
+        font-size: 0.9rem !important; /* Nome um pouco menor no telemóvel */
+        min-height: auto !important; /* Remove altura fixa no mobile */
+    }
+}

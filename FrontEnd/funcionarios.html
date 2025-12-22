@@ -3,32 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StarPeople - Cliente API</title>
-
+    <title>StarPeople - Funcionários</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-    
     <link rel="stylesheet" href="assets/css/styles.css">
 </head>
 <body>
 
-    <nav class="navbar navbar-expand-lg navbar-star mb-4">
-        <div class="container">
-            <a class="navbar-brand" href="#">
-                <i class="bi bi-stars"></i> StarPeople <span style="font-size: 0.6em; opacity: 0.7; margin-left: 5px;">CLIENTE API</span>
-            </a>
-            
-            <button class="navbar-toggler bg-white" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+    <nav class="navbar navbar-expand-lg navbar-star mb-4 py-3">
+        <div class="container-fluid px-4">
+            <div class="d-flex align-items-center gap-3">
+                <a class="navbar-brand me-0" href="home.html">
+                    <i class="bi bi-stars text-warning"></i> StarPeople
+                </a>
+                <span class="badge bg-warning text-dark fw-bold rounded-pill px-3" style="font-size: 0.75em;">BETA</span>
+
+                <div class="dropdown ms-4 d-none d-md-block">
+                    <a class="text-white text-decoration-none dropdown-toggle fw-semibold" href="#" role="button" data-bs-toggle="dropdown">
+                        Administração
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-dark shadow-lg border-0 mt-2">
+                        <li><h6 class="dropdown-header text-muted">Cadastros Base</h6></li>
+                        <li><a class="dropdown-item active" href="funcionarios.html"><i class="bi bi-person-badge me-2 opacity-50"></i> Funcionários</a></li>
+                        <li><a class="dropdown-item" href="setores.html"><i class="bi bi-buildings me-2 opacity-50"></i> Setores</a></li>
+                        <li><a class="dropdown-item" href="cargos.html"><i class="bi bi-briefcase me-2 opacity-50"></i> Cargos</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <button class="navbar-toggler bg-white opacity-75" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto align-items-center">
-                    <li class="nav-item"><a class="nav-link text-warning fw-bold" href="home.html">Dashboard</a></li>
-                    <li class="nav-item"><a class="nav-link text-white" href="funcionarios.html">Funcionários</a></li>
-                    <li class="nav-item"><a class="nav-link text-white" href="setores.html">Setores</a></li>
-                    <li class="nav-item ms-3">
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <ul class="navbar-nav ms-auto align-items-center gap-3 mt-3 mt-lg-0">
+                    <li class="nav-item text-white d-flex flex-column text-end">
+                        <strong id="user-name" class="text-white fw-bold">...</strong>
+                        <span id="user-role" class="badge bg-secondary ms-auto" style="font-size: 0.6em;">...</span>
+                    </li>
+                    <li class="nav-item ms-md-4">
                         <button onclick="logout()" class="btn btn-outline-danger btn-sm">
                             <i class="bi bi-box-arrow-right"></i> Sair
                         </button>
@@ -38,30 +52,63 @@
         </div>
     </nav>
 
-    <div class="container">
+    <div class="container pb-5">
 
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <div>
-                <h2 class="text-white fw-bold">Colaboradores</h2>
-                <p class="text-muted">Lista carregada via API REST</p>
+            <h2 class="text-white fw-bold">Colaboradores</h2>
+            <div class="d-flex gap-2">
+                <button onclick="carregarDados()" class="btn btn-outline-light" title="Recarregar Lista">
+                    <i class="bi bi-arrow-clockwise"></i>
+                </button>
+                <a href="funcionario-form.html" class="btn btn-star-primary">
+                    <i class="bi bi-plus-lg"></i>  Novo Colaborador
+                </a>
             </div>
-            <button onclick="carregarDados()" class="btn btn-star-primary">
-                <i class="bi bi-arrow-clockwise"></i> Atualizar Lista
-            </button>
         </div>
 
-        <div id="status-msg" class="text-center my-4 d-none">
+        <div class="card card-dashboard mb-4 p-4 border-0">
+            <h5 class="text-white mb-3"><i class="bi bi-funnel-fill"></i> Filtrar e Organizar</h5>
+            
+            <div class="row g-3">
+                <div class="col-md-5">
+                    <label class="text-muted small mb-1">Buscar por Texto</label>
+                    <input type="text" id="filtro-texto" class="form-control bg-dark text-white border-secondary" 
+                           placeholder="Nome ou CPF..." onkeyup="aplicarFiltros()">
+                </div>
+
+                <div class="col-md-3">
+                    <label class="text-muted small mb-1">Filtrar por Setor</label>
+                    <select id="filtro-setor" class="form-select bg-dark text-white border-secondary" onchange="aplicarFiltros()">
+                        <option value="">Todos os Setores</option>
+                        </select>
+                </div>
+
+                <div class="col-md-2">
+                    <label class="text-muted small mb-1">Situação</label>
+                    <select id="filtro-status" class="form-select bg-dark text-white border-secondary" onchange="aplicarFiltros()">
+                        <option value="">Todos</option>
+                        <option value="true">Ativos</option>
+                        <option value="false">Inativos</option>
+                    </select>
+                </div>
+
+                <div class="col-md-2 d-flex align-items-end gap-2">
+                    <button onclick="aplicarFiltros()" class="btn btn-star-primary w-100">
+                        <i class="bi bi-search"></i> Filtrar
+                    </button>
+                    <button onclick="limparFiltros()" class="btn btn-outline-secondary" title="Limpar Filtros">
+                        <i class="bi bi-x-lg"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="status-msg" class="text-center my-5 d-none">
             <div class="spinner-border text-primary" role="status"></div>
             <p class="text-muted mt-2">A carregar dados...</p>
         </div>
 
-        <div id="conteudo-principal" class="row g-4">
-            </div>
-
-        <footer class="text-center mt-5 py-4 text-muted">
-            <small>&copy; 2025 <strong>Grupo Starbank</strong> | Cliente Web</small>
-        </footer>
-
+        <div id="conteudo-principal" class="row g-4"></div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

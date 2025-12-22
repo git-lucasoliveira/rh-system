@@ -2,6 +2,7 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>StarPeople - Cargos</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
@@ -10,30 +11,72 @@
 </head>
 <body>
 
-    <nav class="navbar navbar-expand-lg navbar-star mb-4">
-        <div class="container">
-            <a class="navbar-brand" href="home.html"><i class="bi bi-stars"></i> StarPeople API</a>
-            <div class="collapse navbar-collapse">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link text-white" href="home.html">Dashboard</a></li>
-                    <li class="nav-item"><a class="nav-link text-white" href="funcionarios.html">Funcionários</a></li>
-                    <li class="nav-item"><a class="nav-link text-white" href="setores.html">Setores</a></li>
-                    <li class="nav-item"><a class="nav-link text-warning fw-bold" href="cargos.html">Cargos</a></li>
+    <nav class="navbar navbar-expand-lg navbar-star mb-4 py-3">
+        <div class="container-fluid px-4">
+            <div class="d-flex align-items-center gap-3">
+                <a class="navbar-brand me-0" href="home.html">
+                    <i class="bi bi-stars text-warning"></i> StarPeople
+                </a>
+                <span class="badge bg-warning text-dark fw-bold rounded-pill px-3" style="font-size: 0.75em;">BETA</span>
+
+                <div class="dropdown ms-4 d-none d-md-block">
+                    <a class="text-white text-decoration-none dropdown-toggle fw-semibold" href="#" role="button" data-bs-toggle="dropdown">
+                        Administração
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-dark shadow-lg border-0 mt-2">
+                        <li><h6 class="dropdown-header text-muted">Cadastros Base</h6></li>
+                        <li><a class="dropdown-item" href="funcionarios.html"><i class="bi bi-person-badge me-2 opacity-50"></i> Funcionários</a></li>
+                        <li><a class="dropdown-item" href="setores.html"><i class="bi bi-buildings me-2 opacity-50"></i> Setores</a></li>
+                        <li><a class="dropdown-item active" href="cargos.html"><i class="bi bi-briefcase me-2 opacity-50"></i> Cargos</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <button class="navbar-toggler bg-white opacity-75" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <ul class="navbar-nav ms-auto align-items-center gap-3 mt-3 mt-lg-0">
+                    <li class="nav-item text-white d-flex flex-column text-end">
+                        <strong id="user-name" class="text-white fw-bold">...</strong>
+                        <span id="user-role" class="badge bg-secondary ms-auto" style="font-size: 0.6em;">...</span>
+                    </li>
+                    <li class="nav-item ms-md-4">
+                        <button onclick="logout()" class="btn btn-outline-danger btn-sm">
+                            <i class="bi bi-box-arrow-right"></i> Sair
+                        </button>
+                    </li>
                 </ul>
             </div>
         </div>
     </nav>
 
-    <div class="container">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h2 class="text-white fw-bold">Gestão de Cargos</h2>
-            <button onclick="carregarCargos()" class="btn btn-star-primary"><i class="bi bi-arrow-clockwise"></i> Atualizar</button>
+    <div class="container pb-5">
+        <div class="d-flex justify-content-between align-items-end mb-4 border-bottom border-secondary border-opacity-25 pb-3">
+            <div>
+                <h2 class="text-white fw-bold mb-0">Cargos</h2>
+                <p class="text-white opacity-50 mb-0">Funções e posições</p>
+            </div>
+            <div class="d-flex gap-2">
+                <button onclick="carregarCargos()" class="btn btn-outline-light" title="Atualizar">
+                    <i class="bi bi-arrow-clockwise"></i>
+                </button>
+                <button class="btn btn-star-primary">
+                    <i class="bi bi-plus-lg"></i> Novo
+                </button>
+            </div>
         </div>
 
-        <div id="lista-cargos" class="row g-4">
-            </div>
+        <div id="status-msg" class="text-center my-5 d-none">
+            <div class="spinner-border text-primary" role="status"></div>
+            <p class="text-muted mt-2">Carregando cargos...</p>
+        </div>
+
+        <div id="conteudo-principal" class="row g-4"></div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="assets/js/cargos.js"></script>
 </body>
 </html>
