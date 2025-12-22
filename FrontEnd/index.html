@@ -3,51 +3,76 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StarPeople - Cliente API</title>
-
+    <title>Login - StarPeople</title>
+    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="assets/css/styles.css">
+
+    <style>
+        /* CSS Específico para Centralizar o Login */
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background: var(--star-dark);
+            background-image: var(--star-gradient); /* Fundo com gradiente bonito */
+        }
+        .login-card {
+            width: 100%;
+            max-width: 400px;
+            padding: 2rem;
+            border: 1px solid var(--border-dark);
+            background-color: rgba(26, 11, 46, 0.95); /* Fundo vidro escuro */
+            backdrop-filter: blur(10px);
+        }
+        .logo-login {
+            font-size: 3rem;
+            color: var(--star-primary);
+            margin-bottom: 1rem;
+            text-shadow: 0 0 15px rgba(138, 43, 226, 0.5);
+        }
+    </style>
 </head>
 <body>
 
-    <nav class="navbar navbar-expand-lg navbar-star mb-4">
-        <div class="container">
-            <a class="navbar-brand" href="#">
-                <i class="bi bi-stars"></i> StarPeople <span style="font-size: 0.6em; opacity: 0.7; margin-left: 5px;">CLIENTE API</span>
-            </a>
+    <div class="card login-card card-dashboard text-center">
+        
+        <div class="mb-3">
+            <i class="bi bi-stars logo-login"></i>
+            <h3 class="fw-bold text-white">StarPeople</h3>
+            <p class="text-muted small">Acesso ao Sistema de Gestão</p>
         </div>
-    </nav>
 
-    <div class="container">
+        <div id="msg-erro" class="alert alert-danger d-none text-start p-2 small">
+            <i class="bi bi-exclamation-circle-fill"></i> Usuário ou senha inválidos.
+        </div>
 
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <div>
-                <h2 class="text-white fw-bold">Colaboradores</h2>
-                <p class="text-muted">Lista carregada via API REST</p>
+        <form id="form-login" onsubmit="fazerLogin(event)">
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="loginEmail" placeholder="usuario" required>
+                <label for="loginEmail">Usuário / Email</label>
             </div>
-            <button onclick="carregarDados()" class="btn btn-star-primary">
-                <i class="bi bi-arrow-clockwise"></i> Atualizar Lista
+            
+            <div class="form-floating mb-4">
+                <input type="password" class="form-control" id="loginSenha" placeholder="Senha" required>
+                <label for="loginSenha">Senha</label>
+            </div>
+
+            <button type="submit" class="btn btn-star-primary w-100 py-2 fs-6">
+                ENTRAR NO SISTEMA
             </button>
+        </form>
+
+        <div class="mt-4 text-muted small">
+            <p class="mb-0">Esqueceu a senha? <a href="#" class="text-warning">Contate a TI</a></p>
         </div>
-
-        <div id="status-msg" class="text-center my-4 d-none">
-            <div class="spinner-border text-primary" role="status"></div>
-            <p class="text-muted mt-2">A carregar dados...</p>
-        </div>
-
-        <div id="conteudo-principal" class="row g-4">
-            </div>
-
-        <footer class="text-center mt-5 py-4 text-muted">
-            <small>&copy; 2025 <strong>Grupo Starbank</strong> | Cliente Web</small>
-        </footer>
-
+        
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="assets/js/app.js"></script>
+    <script src="assets/js/login.js"></script>
 </body>
 </html>

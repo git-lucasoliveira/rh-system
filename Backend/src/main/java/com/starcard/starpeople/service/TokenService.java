@@ -53,6 +53,10 @@ public class TokenService {
                     .parseClaimsJws(token);
             return true;
         } catch (Exception e) {
+            // --- ADICIONA ESTAS LINHAS PARA VER O ERRO ---
+            System.out.println("ERRO AO VALIDAR TOKEN: " + e.getMessage());
+            e.printStackTrace();
+            // ---------------------------------------------
             return false;
         }
     }

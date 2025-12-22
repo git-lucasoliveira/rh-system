@@ -1,4 +1,4 @@
-package com.starcard.starpeople.controller;
+package com.starcard.starpeople.controller.api;
 
 import com.starcard.starpeople.dto.DadosAutenticacao;
 import com.starcard.starpeople.dto.DadosTokenJWT;

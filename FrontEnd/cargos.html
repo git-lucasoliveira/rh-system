@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>StarPeople - Cargos</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-star mb-4">
+        <div class="container">
+            <a class="navbar-brand" href="home.html"><i class="bi bi-stars"></i> StarPeople API</a>
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link text-white" href="home.html">Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link text-white" href="funcionarios.html">Funcionários</a></li>
+                    <li class="nav-item"><a class="nav-link text-white" href="setores.html">Setores</a></li>
+                    <li class="nav-item"><a class="nav-link text-warning fw-bold" href="cargos.html">Cargos</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="text-white fw-bold">Gestão de Cargos</h2>
+            <button onclick="carregarCargos()" class="btn btn-star-primary"><i class="bi bi-arrow-clockwise"></i> Atualizar</button>
+        </div>
+
+        <div id="lista-cargos" class="row g-4">
+            </div>
+    </div>
+
+    <script src="assets/js/cargos.js"></script>
+</body>
+</html>

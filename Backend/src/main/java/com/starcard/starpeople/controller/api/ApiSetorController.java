@@ -1,4 +1,4 @@
-package com.starcard.starpeople.controller;
+package com.starcard.starpeople.controller.api;
 
 import com.starcard.starpeople.model.Setor;
 import com.starcard.starpeople.repository.SetorRepository;

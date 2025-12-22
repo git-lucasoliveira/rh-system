@@ -44,9 +44,27 @@ public class SecurityFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
+    // Substitui o método recuperarToken antigo por este COM LOGS:
     private String recuperarToken(HttpServletRequest request) {
-        String authHeader = request.getHeader("Authorization");
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) return null;
-        return authHeader.substring(7).trim();
+        var authHeader = request.getHeader("Authorization");
+
+        // --- DEBUG: VAMOS VER O QUE CHEGA ---
+        System.out.println("=============================================");
+        System.out.println("🔍 URL CHAMADA: " + request.getRequestURI());
+        System.out.println("🔍 CABEÇALHO AUTHORIZATION: " + authHeader);
+        // ------------------------------------
+
+        if (authHeader == null) {
+            System.out.println("❌ O cabeçalho está NULO (O JS não enviou nada).");
+            return null;
+        }
+
+        if (!authHeader.startsWith("Bearer ")) {
+            System.out.println("❌ O cabeçalho não começa com 'Bearer ' (Formato errado).");
+            return null;
+        }
+
+        System.out.println("✅ Token extraído com sucesso! Enviando para validação...");
+        return authHeader.replace("Bearer ", "").trim();
     }
 }

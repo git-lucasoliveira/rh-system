@@ -15,12 +15,12 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/funcionarios")
 @CrossOrigin(origins = "*")
-public class FuncionarioAPIController {
+public class ApiFuncionarioController {
 
     private final FuncionarioService service;
 
     // Injeção de dependência via Construtor (Prática Recomendada)
-    public FuncionarioAPIController(FuncionarioService service) {
+    public ApiFuncionarioController(FuncionarioService service) {
         this.service = service;
     }
 
