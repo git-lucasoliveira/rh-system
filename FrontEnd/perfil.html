@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StarPeople - Painel de Gestão</title>
-    
+    <title>Meu Perfil - StarPeople</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
@@ -66,78 +65,60 @@
         </div>
     </nav>
 
-    <div class="container">
-        
-        <div class="text-center mb-5">
-            <h2 class="fw-bold text-white display-6">Painel de Gestão</h2>
-            <p class="text-white opacity-50 fs-5">Visão geral dos indicadores</p>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+
+                <div class="card card-dashboard p-4 border-0 shadow-lg">
+                    
+                    <div class="text-center mb-4">
+                        <div class="bg-star-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3 shadow" 
+                             style="width: 80px; height: 80px; font-size: 2rem; border: 2px solid #fff;">
+                            <i class="bi bi-person-circle"></i>
+                        </div>
+                        
+                        <h3 class="text-white mt-2 mb-1" id="perfil-login">Carregando...</h3>
+                        <span class="badge bg-secondary border border-secondary" id="perfil-role-badge">...</span>
+                    </div>
+
+                    <hr class="border-secondary opacity-25">
+
+                    <h5 class="text-white mb-4 fw-bold"><i class="bi bi-key-fill text-warning"></i> Alterar Senha</h5>
+
+                    <div id="msg-feedback" class="alert d-none text-center small"></div>
+
+                    <form id="form-senha">
+                        
+                        <div class="mb-3">
+                            <label class="text-white opacity-75 small">Login (Usuário)</label>
+                            <input type="text" id="input-login" class="form-control bg-dark text-white border-secondary" readonly>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="text-white opacity-75 small">Nova Senha</label>
+                                <input type="password" id="novaSenha" class="form-control bg-dark text-white border-secondary" minlength="3" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="text-white opacity-75 small">Confirmar Senha</label>
+                                <input type="password" id="confirmaSenha" class="form-control bg-dark text-white border-secondary" minlength="3" required>
+                            </div>
+                        </div>
+
+                        <div class="d-grid mt-4">
+                            <button type="submit" id="btn-salvar" class="btn btn-star-primary fw-bold">
+                                <i class="bi bi-check2-circle"></i> Salvar Nova Senha
+                            </button>
+                        </div>
+
+                    </form>
+                </div>
+
+            </div>
         </div>
-
-        <div class="row g-4 justify-content-center">
-
-            <div class="col-md-6 col-lg-4">
-                <div class="card card-dashboard h-100 p-4 border-0">
-                    <div class="card-body text-center d-flex flex-column justify-content-center">
-                        <div class="card-icon mx-auto mb-4">
-                            <i class="bi bi-people-fill fs-2"></i>
-                        </div>
-                        <h4 class="card-title text-white fw-bold">Colaboradores</h4>
-
-                        <h2 id="total-funcionarios" class="display-4 fw-bold text-white my-3">-</h2>
-                        <p class="text-white opacity-50 mb-4">Registrados no sistema</p>
-
-                        <a href="funcionarios.html" class="btn btn-star-primary w-100 mt-auto py-2 fw-bold">
-                            Acessar Módulo
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-6 col-lg-4">
-                <div class="card card-dashboard h-100 p-4 border-0">
-                    <div class="card-body text-center d-flex flex-column justify-content-center">
-                        <div class="card-icon mx-auto mb-4">
-                            <i class="bi bi-buildings-fill fs-2"></i>
-                        </div>
-                        <h4 class="card-title text-white fw-bold">Setores</h4>
-
-                        <h2 id="total-setores" class="display-4 fw-bold text-white my-3">-</h2>
-                        <p class="text-white opacity-50 mb-4">Departamentos ativos</p>
-
-                        <a href="setores.html" class="btn btn-star-outline w-100 mt-auto py-2 fw-bold">
-                            Gerenciar Setores
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-6 col-lg-4">
-                <div class="card card-dashboard h-100 p-4 border-0">
-                    <div class="card-body text-center d-flex flex-column justify-content-center">
-                        <div class="card-icon mx-auto mb-4">
-                            <i class="bi bi-briefcase-fill fs-2"></i>
-                        </div>
-                        <h4 class="card-title text-white fw-bold">Cargos</h4>
-
-                        <h2 id="total-cargos" class="display-4 fw-bold text-white my-3">-</h2>
-                        <p class="text-white opacity-50 mb-4">Funções cadastradas</p>
-
-                        <a href="cargos.html" class="btn btn-star-outline w-100 mt-auto py-2 fw-bold">
-                            Gerenciar Cargos
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-
-        <footer class="text-center mt-5 py-4 text-muted border-top border-secondary border-opacity-10">
-            <small class="text-white opacity-50">&copy; 2025 <strong>Grupo Starbank</strong> | Dashboard v2.0 BETA</small>
-        </footer>
-
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="assets/js/home.js"></script>
+    <script src="assets/js/perfil.js"></script>
 </body>
 </html>

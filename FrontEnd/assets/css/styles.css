@@ -313,3 +313,84 @@ footer {
         min-height: auto !important; /* Remove altura fixa no mobile */
     }
 }
+
+/* Fundo Geral */
+body {
+    background-color: #0f0c1d; /* Roxo quase preto */
+    font-family: 'Poppins', sans-serif;
+    color: #fff;
+}
+
+/* Navbar */
+.navbar-star {
+    background-color: #1a162e;
+    border-bottom: 1px solid #2d2a45;
+    padding: 1rem 2rem;
+}
+.brand-logo {
+    font-weight: 800;
+    font-size: 1.5rem;
+    color: #fff;
+    text-decoration: none;
+}
+.badge-beta {
+    background-color: #ffc107;
+    color: #000;
+    font-size: 0.7rem;
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-left: 5px;
+    vertical-align: middle;
+}
+
+/* Cartões */
+.card-dashboard {
+    background-color: #151221;
+    border: 1px solid #2d2a45;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    border-radius: 12px;
+}
+
+/* Botão Principal (Roxo Brilhante) */
+.btn-star-primary {
+    background: linear-gradient(135deg, #6f42c1, #a64bf4);
+    border: none;
+    color: white;
+    font-weight: 600;
+    box-shadow: 0 4px 15px rgba(111, 66, 193, 0.4);
+    transition: transform 0.2s;
+}
+.btn-star-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(111, 66, 193, 0.6);
+    color: white;
+}
+
+/* Tabela */
+.table-dark {
+    --bs-table-bg: transparent;
+}
+.table-hover tbody tr:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+th {
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+    border-bottom: 2px solid #6f42c1 !important;
+    color: #ccc;
+}
+
+/* Badge do Perfil no Topo (Amarelo) */
+.badge-profile {
+    background-color: #ffc107; /* Amarelo StarPeople */
+    color: #000;               /* Texto Preto para contraste */
+    font-size: 0.7rem;
+    font-weight: 800;          /* Texto bem grosso */
+    padding: 4px 8px;
+    border-radius: 6px;        /* Bordas arredondadas */
+    text-transform: uppercase; /* Força letra maiúscula */
+    margin-left: 8px;          /* Espaço entre o nome e o badge */
+    vertical-align: middle;
+    letter-spacing: 0.5px;
+}

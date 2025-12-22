@@ -1,13 +1,17 @@
 package com.starcard.starpeople.controller;
 
+import com.starcard.starpeople.model.LogSistema;
 import com.starcard.starpeople.service.LogService;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
-@RequestMapping("/logs")
+import java.util.List;
+
+@RestController // Mudou de @Controller para @RestController (retorna dados, não HTML)
+@RequestMapping("/api/logs") // Boa prática: separar APIs com /api
+@CrossOrigin(origins = "*") // CORREÇÃO DO ERRO: Permite acesso de qualquer frontend
 public class LogController {
 
     private final LogService service;
@@ -17,8 +21,8 @@ public class LogController {
     }
 
     @GetMapping
-    public String listarLogs(Model model) {
-        model.addAttribute("logs", service.listarTudo());
-        return "logs/lista";
+    public List<LogSistema> listarLogs() {
+        // Agora retorna a lista diretamente. O Spring converte para JSON automaticamente.
+        return service.listarTudo();
     }
 }
