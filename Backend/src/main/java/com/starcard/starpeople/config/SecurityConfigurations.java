@@ -30,29 +30,39 @@ public class SecurityConfigurations {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
+        return http
                 .csrf(csrf -> csrf.disable())
-                // Configura o CORS usando o Bean definido lá em baixo
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(req -> {
+                    // 1. Acesso Público
+                    req.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll();
+                    req.requestMatchers("/index.html", "/login.html", "/login", "/auth/**", "/api/auth/**").permitAll();
+                    req.requestMatchers("/css/**", "/js/**", "/images/**", "/assets/**", "/*.html").permitAll();
 
-                // Define a política de sessão como STATELESS (ideal para APIs com Token JWT)
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                    // 2. Apenas SuperAdmin (Aceita com ou sem ROLE_)
+                    req.requestMatchers("/api/usuarios/**", "/api/logs/**")
+                            .hasAnyAuthority("SUPERADMIN", "ROLE_SUPERADMIN");
 
-                .authorizeHttpRequests(authorize -> authorize
-                        // 1. Libera o Preflight (OPTIONS) e Login
-                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                        .requestMatchers("/auth/**", "/login", "/api/auth/**").permitAll()
+                    req.requestMatchers(HttpMethod.DELETE, "/api/funcionarios/**")
+                            .hasAnyAuthority("SUPERADMIN", "ROLE_SUPERADMIN");
 
-                        // 2. Libera arquivos estáticos (caso você acesse algo direto no backend)
-                        .requestMatchers("/css/**", "/js/**", "/images/**", "/assets/**").permitAll()
+                    // 3. Criação (SuperAdmin e TI)
+                    req.requestMatchers(HttpMethod.POST, "/api/funcionarios/**")
+                            .hasAnyAuthority("SUPERADMIN", "ROLE_SUPERADMIN", "TI", "ROLE_TI");
 
-                        // 3. Todo o resto precisa de autenticação
-                        .anyRequest().authenticated()
-                )
-                // Filtro do Token JWT antes do filtro padrão
-                .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class);
+                    // 4. LEITURA E EDIÇÃO (Onde estava dando erro 403)
+                    // Agora aceitamos RH, ROLE_RH, TI, ROLE_TI, etc.
+                    req.requestMatchers(HttpMethod.GET, "/api/**")
+                            .hasAnyAuthority("SUPERADMIN", "ROLE_SUPERADMIN", "TI", "ROLE_TI", "RH", "ROLE_RH");
 
-        return http.build();
+                    req.requestMatchers(HttpMethod.PUT, "/api/**")
+                            .hasAnyAuthority("SUPERADMIN", "ROLE_SUPERADMIN", "TI", "ROLE_TI", "RH", "ROLE_RH");
+
+                    req.anyRequest().authenticated();
+                })
+                .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
+                .build();
     }
 
     @Bean

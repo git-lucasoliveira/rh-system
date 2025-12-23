@@ -24,6 +24,12 @@ public class TokenService {
         return Jwts.builder()
                 .setIssuer("StarPeople API")
                 .setSubject(usuario.getLogin())
+
+                // --- ESTA É A LINHA QUE FALTA ---
+                // Ela grava o perfil dentro do "cartão de acesso"
+                .claim("perfil", usuario.getPerfil().toString())
+                // --------------------------------
+
                 .setIssuedAt(new Date())
                 .setExpiration(dataExpiracao())
                 .signWith(getChave())
