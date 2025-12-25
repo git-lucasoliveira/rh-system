@@ -40,23 +40,35 @@ public class SecurityConfigurations {
                     req.requestMatchers("/index.html", "/login.html", "/login", "/auth/**", "/api/auth/**").permitAll();
                     req.requestMatchers("/css/**", "/js/**", "/images/**", "/assets/**", "/*.html").permitAll();
 
-                    // 2. Apenas SuperAdmin (Aceita com ou sem ROLE_)
+                    // 2. Apenas SuperAdmin
                     req.requestMatchers("/api/usuarios/**", "/api/logs/**")
                             .hasAnyAuthority("SUPERADMIN", "ROLE_SUPERADMIN");
 
+                    // 3. FUNCIONÁRIOS - REGRAS ESPECÍFICAS PRIMEIRO!
                     req.requestMatchers(HttpMethod.DELETE, "/api/funcionarios/**")
                             .hasAnyAuthority("SUPERADMIN", "ROLE_SUPERADMIN");
 
-                    // 3. Criação (SuperAdmin e TI)
                     req.requestMatchers(HttpMethod.POST, "/api/funcionarios/**")
                             .hasAnyAuthority("SUPERADMIN", "ROLE_SUPERADMIN", "TI", "ROLE_TI");
 
-                    // 4. LEITURA E EDIÇÃO (Onde estava dando erro 403)
-                    // Agora aceitamos RH, ROLE_RH, TI, ROLE_TI, etc.
-                    req.requestMatchers(HttpMethod.GET, "/api/**")
+                    req.requestMatchers(HttpMethod.PUT, "/api/funcionarios/**")
                             .hasAnyAuthority("SUPERADMIN", "ROLE_SUPERADMIN", "TI", "ROLE_TI", "RH", "ROLE_RH");
 
-                    req.requestMatchers(HttpMethod.PUT, "/api/**")
+                    req.requestMatchers(HttpMethod.GET, "/api/funcionarios/**")
+                            .hasAnyAuthority("SUPERADMIN", "ROLE_SUPERADMIN", "TI", "ROLE_TI", "RH", "ROLE_RH");
+
+                    // 4. Setores e Cargos
+                    req.requestMatchers(HttpMethod.POST, "/api/setores/**", "/api/cargos/**")
+                            .hasAnyAuthority("SUPERADMIN", "ROLE_SUPERADMIN", "TI", "ROLE_TI");
+
+                    req.requestMatchers(HttpMethod.PUT, "/api/setores/**", "/api/cargos/**")
+                            .hasAnyAuthority("SUPERADMIN", "ROLE_SUPERADMIN", "TI", "ROLE_TI");
+
+                    req.requestMatchers(HttpMethod.DELETE, "/api/setores/**", "/api/cargos/**")
+                            .hasAnyAuthority("SUPERADMIN", "ROLE_SUPERADMIN");
+
+                    // 5. LEITURA GENÉRICA (por último)
+                    req.requestMatchers(HttpMethod.GET, "/api/**")
                             .hasAnyAuthority("SUPERADMIN", "ROLE_SUPERADMIN", "TI", "ROLE_TI", "RH", "ROLE_RH");
 
                     req.anyRequest().authenticated();

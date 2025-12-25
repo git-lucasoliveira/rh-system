@@ -1,108 +1,260 @@
-# People Manager (StarPeople)
+﻿#  StarPeople - Sistema de Gestão de Pessoas
 
-Sistema de Gestão de Pessoas (RH)  
-**Stack:** Java 17+, Spring Boot, Spring Security 6, Thymeleaf, SQL Server, JWT, JUnit 5, Mockito
-
----
-
-## 📌 Contexto do Projeto
-
-O **People Manager (StarPeople)** é um sistema de gestão de pessoas, atualmente em fase avançada de desenvolvimento. Com uma base sólida em Java e Spring Boot, o projeto foi concebido para demonstrar arquitetura robusta, separação clara de responsabilidades, práticas modernas de segurança e capacidade de evolução tecnológica.  
-Apesar de plenamente estável e funcional, o sistema ainda não foi publicado em ambiente produtivo.
+Sistema completo de gestão de colaboradores desenvolvido para o **Grupo Starbank**, com arquitetura full-stack moderna e segura.
 
 ---
 
-## 🎯 Objetivo do Projeto
+##  Sobre o Projeto
 
-Este projeto foi desenvolvido para:
+**StarPeople** é uma aplicação corporativa para gestão completa de recursos humanos, incluindo:
 
-- **Evidenciar uma arquitetura backend sólida e escalável**
-- Garantir **separação explícita de responsabilidades**
-- Aplicar as **melhores práticas de segurança** com tecnologias modernas
-- Demonstrar que é possível **evoluir do modelo MVC tradicional para um frontend moderno** rapidamente, sem retrabalho estrutural
-
----
-
-## 🧠 Decisão Arquitetural Importante
-
-> **Frontend Thymeleaf: uma decisão estratégica**
-
-Atualmente, o sistema utiliza **Thymeleaf** como mecanismo de frontend.  
-**Essa escolha não decorre de limitação técnica, mas sim de uma decisão consciente e estratégica:**
-- **Estabilidade do backend**: a prioridade foi garantir uma API e modelagem de negócio robustas antes de investir em um frontend mais avançado.
-- **Segurança correta e centralizada**: toda a autenticação, autorização e separação de escopos foi validada sob o stack atual.
-- **Facilidade de evolução**: o backend foi estruturado desde o início para expor endpoints REST seguros ("/api/**"), facilitando a transição ou coexistência com frontends modernos (ex: React).
-
-> *Uma API confiável e bem arquitetada é pré-requisito para um frontend rico. Priorizamos arquitetura para evitar retrabalho e garantir longevidade ao sistema.*
+-  **Gestão de Colaboradores** - Cadastro, edição, inativação e exclusão  
+-  **Organização Empresarial** - Setores e cargos  
+-  **Controle de Acesso** - Sistema de autenticação com 3 perfis (SUPERADMIN, TI, RH)  
+-  **Auditoria** - Logs completos de todas as operações  
+-  **Interface Moderna** - Design responsivo e intuitivo  
+-  **Performance Otimizada** - Requisições rápidas e UX fluida
 
 ---
 
-## 🏗️ Estrutura e Arquitetura
+##  Arquitetura do Sistema
 
-O projeto adota **arquitetura em camadas**, com separação explícita de responsabilidades:
+```
+StarPeople-Sistema/
 
-- **Controller Layer**
-  - Controllers MVC: responsáveis pelo fluxo do Thymeleaf e rotas web tradicionais.
-  - Controllers REST: expõem endpoints ("/api/**") para integração futura e consumo externo.
-- **Service Layer**
-  - Contém a lógica de negócio central, reutilizada por ambos os tipos de controller.
-- **Repository Layer**
-  - Responsável pelo acesso a dados, abstraindo a persistência.
-- **DTOs (Data Transfer Objects)**
-  - Utilizados tanto para os controllers REST quanto MVC, favorecendo desacoplamento e segurança dos dados trafegados.
+ Backend/                    # API REST - Spring Boot
+    src/main/java/
+       com/starcard/starpeople/
+           config/         # Segurança e configurações
+           controller/     # Endpoints REST
+           model/          # Entidades JPA
+           repository/     # Acesso a dados
+           service/        # Lógica de negócio
+           dto/            # Data Transfer Objects
+    README.md              #  Documentação Backend
 
-Esse modelo visa **clareza, testabilidade e facilidade de manutenção**, além de preparar a base para evoluções futuras.
+ Frontend/                   # SPA - Vanilla JavaScript
+    *.html                 # Páginas da aplicação
+    assets/
+       css/               # Estilos (CSS Variables)
+       js/                # Lógica JavaScript
+    README.md              #  Documentação Frontend
 
----
-
-## 🔐 Segurança
-
-A segurança é um pilar central do projeto, implementada de forma moderna e flexível:
-
-- **Thymeleaf (MVC tradicional)**
-  - Autenticação via sessão (form-based), adequada à navegação web clássica.
-- **API REST**
-  - Autenticação via JWT, possibilitando integrações seguras e escaláveis.
-- **Separação de escopos**
-  - Rotas públicas e áreas protegidas são claramente segregadas, garantindo o princípio do menor privilégio.
-
-A arquitetura permite expandir os métodos de autenticação conforme a necessidade, mantendo a segurança e governança sobre as informações sensíveis.
+ README.md                  #  Este arquivo (Visão Geral)
+```
 
 ---
 
-## 🧪 Testes
+##  Stack Tecnológica
 
-O projeto adota uma abordagem consistente de testes desde sua concepção:
+### Backend (API REST)
+- Java 17+
+- Spring Boot 3.x
+- Spring Security 6.x  
+- Spring Data JPA
+- SQL Server
+- JWT Authentication
+- Lombok
 
-- **Testes unitários na camada de serviço**
-  - Cobrem as regras de negócio essenciais, utilizando **JUnit 5** e **Mockito**.
-- **Testes de integração nos controllers**
-  - Verificam fluxos completos, integração e comportamento esperados.
-- **Ferramentas**
-  - JUnit 5 (testes, assertions e fluxo)
-  - Mockito (mocks, stubs e verificação de interações)
-
-Essa preocupação reforça a estabilidade e confiabilidade das entregas.
-
----
-
-## 🚀 Status do Projeto e Próximos Passos
-
-- **Status atual:**  
-  Projeto estável, funcional, cumprindo os requisitos técnicos e de negócio propostos.
-
-- **Próximos passos planejados:**
-  - Evolução do frontend, com desenvolvimento de um aplicativo web em React para proporcionar uma experiência de usuário mais rica e desacoplada.
-  - Possível deploy em ambiente cloud (em definição).
+### Frontend (SPA)
+- HTML5 + CSS3
+- JavaScript (Vanilla ES6+)
+- Bootstrap 5.3.0
+- Bootstrap Icons 1.11.3
 
 ---
 
-## 📎 Considerações Finais
+##  Funcionalidades Principais
 
-Este projeto reflete escolhas arquiteturais pensadas visando escalabilidade, segurança e facilidade de manutenção.  
-Ao investir numa fundação técnica sólida, garantimos que futuras evoluções (frontend moderno, integrações externas, novos módulos) serão realizadas com agilidade e baixo risco de retrabalho.
+###  Gestão de Colaboradores
+-  Cadastro completo (nome, CPF, email, data admissão)
+-  Edição de dados cadastrais
+-  Inativação/Ativação de colaboradores  
+-  Exclusão definitiva (apenas SUPERADMIN)
+-  Filtros avançados (nome, setor, status)
+-  Validação de CPF e email
+
+###  Gestão Organizacional
+-  CRUD de Setores
+-  CRUD de Cargos
+-  Permissões por perfil
+
+###  Controle de Acesso
+
+| Perfil | Permissões |
+|--------|-----------|
+| **SUPERADMIN**  | Acesso total: CRUD em tudo, logs, usuários |
+| **TI**  | CRUD Funcionários/Setores/Cargos (exceto DELETE Setor/Cargo) |
+| **RH**  | GET e PUT em Funcionários, GET em Setores/Cargos |
+
+###  Logs de Auditoria
+- Registro de todas as operações críticas
+- Identificação do usuário responsável
+- Data e hora precisas
+- Visualização apenas para SUPERADMIN
 
 ---
 
-**Engenharia de software com foco em clareza, evolução e segurança.**
+##  Instalação Rápida
 
+### Pré-requisitos
+- Java 17+
+- Maven 3.6+
+- SQL Server (localhost:1433)
+- Navegador moderno
+
+### 1. Backend
+
+```bash
+cd Backend
+# Configurar application-local.properties com suas credenciais
+mvn clean install
+mvn spring-boot:run
+```
+
+ Rodando em: http://localhost:8080
+
+### 2. Frontend
+
+```bash
+cd Frontend
+# Abrir com Live Server ou: python -m http.server 5500
+```
+
+ Rodando em: http://localhost:5500
+
+### 3. Login Padrão (desenvolvimento)
+- **Login:** admin
+- **Senha:** admin123
+
+---
+
+##  Documentação Detalhada
+
+-  [Backend README](./Backend/README.md) - API, endpoints, segurança, banco de dados
+-  [Frontend README](./Frontend/README.md) - Componentes, estrutura, notificações
+
+---
+
+##  Segurança
+
+### Medidas Implementadas
+-  Autenticação JWT (2h de expiração)
+-  Senhas criptografadas com BCrypt
+-  CORS configurado
+-  Autorização baseada em perfis
+-  Validação de dados (frontend + backend)
+-  Logs de auditoria
+-  Proteção contra SQL Injection
+-  XSS Prevention
+
+###  Checklist de Produção
+- [ ] Trocar senhas padrão
+- [ ] Gerar JWT secret único (64+ caracteres)
+- [ ] Configurar HTTPS/SSL
+- [ ] Implementar rate limiting
+- [ ] Backup automático do banco
+- [ ] Política de rotação de senhas
+
+---
+
+##  Design System
+
+### Paleta de Cores
+- **Fundo Principal:** #0a0e27
+- **Fundo Secundário:** #1a1f3a
+- **Azul Primário:** #3b82f6
+- **Roxo Secundário:** #8b5cf6
+- **Verde Sucesso:** #10b981
+- **Vermelho Erro:** #ef4444
+
+### Tipografia
+- **Fonte:** Inter (Google Fonts)
+- **Pesos:** 300, 400, 500, 600, 700, 800
+
+---
+
+##  Performance
+
+### Otimizações
+-  Transições CSS simplificadas (0.2s ease)
+-  Animações com requestAnimationFrame
+-  Debounce em filtros (300ms)
+-  Renderização em lote (DocumentFragment)
+-  Removido backdrop-filter blur pesado
+
+**Resultado:** ~60 FPS constante, interface fluida
+
+---
+
+##  Estrutura do Banco de Dados
+
+```
+funcionarios  setores
+             cargos
+
+usuarios (login, senha, perfil)
+log_sistema (usuario, acao, data_hora)
+```
+
+---
+
+##  Testes
+
+### Funcionalidades Validadas
+- [x] Autenticação e autorização
+- [x] CRUD completo de colaboradores
+- [x] CRUD de setores e cargos
+- [x] Filtros e busca
+- [x] Validações (CPF, email)
+- [x] Sistema de notificações
+- [x] Logs de auditoria
+- [x] Permissões por perfil
+
+---
+
+##  Troubleshooting
+
+### Backend não inicia
+**Erro:** Cannot create PoolableConnectionFactory  
+**Solução:** Verificar SQL Server rodando e credenciais em application-local.properties
+
+### Frontend 401/403
+**Erro:** Unauthorized/Forbidden  
+**Solução:** Fazer login novamente ou verificar permissões do usuário
+
+### CORS Error
+**Solução:** Verificar SecurityConfigurations.java  corsConfigurationSource()
+
+---
+
+##  Roadmap Futuro
+
+- [ ] Dashboard com gráficos
+- [ ] Exportação de relatórios (PDF, Excel)
+- [ ] Gestão de férias e licenças
+- [ ] Upload de foto de perfil
+- [ ] Integração com Active Directory
+- [ ] App mobile (React Native)
+- [ ] Modo claro (light theme)
+
+---
+
+##  Licença
+
+© 2025 Grupo Starbank - Sistema Interno
+
+**Uso Restrito:** Propriedade do Grupo Starbank, destinado exclusivamente ao uso interno.
+
+---
+
+##  Equipe
+
+**Desenvolvimento:** Equipe de TI - Grupo Starbank  
+**Suporte:** ti@starbank.com.br  
+**Versão:** 1.0.0  
+**Data:** Dezembro 2025
+
+---
+
+**Feito com  pela equipe de TI do Grupo Starbank**

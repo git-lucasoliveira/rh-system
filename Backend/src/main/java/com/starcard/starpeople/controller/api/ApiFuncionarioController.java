@@ -1,7 +1,12 @@
 package com.starcard.starpeople.controller.api;
 
 import com.starcard.starpeople.dto.FuncionarioDTO;
+import com.starcard.starpeople.model.Cargo;
 import com.starcard.starpeople.model.Funcionario;
+import com.starcard.starpeople.model.Setor;
+import com.starcard.starpeople.repository.CargoRepository;
+import com.starcard.starpeople.repository.FuncionarioRepository;
+import com.starcard.starpeople.repository.SetorRepository;
 import com.starcard.starpeople.service.FuncionarioService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -18,10 +23,19 @@ import java.util.stream.Collectors;
 public class ApiFuncionarioController {
 
     private final FuncionarioService service;
+    private final FuncionarioRepository funcionarioRepository;
+    private final SetorRepository setorRepository;
+    private final CargoRepository cargoRepository;
 
     // Injeção de dependência via Construtor (Prática Recomendada)
-    public ApiFuncionarioController(FuncionarioService service) {
+    public ApiFuncionarioController(FuncionarioService service,
+                                    FuncionarioRepository funcionarioRepository,
+                                    SetorRepository setorRepository,
+                                    CargoRepository cargoRepository) {
         this.service = service;
+        this.funcionarioRepository = funcionarioRepository;
+        this.setorRepository = setorRepository;
+        this.cargoRepository = cargoRepository;
     }
 
     // 1. LISTAR TODOS (Retorna DTO para proteger a entidade e evitar loop JSON)
@@ -45,8 +59,6 @@ public class ApiFuncionarioController {
     // 2. BUSCAR POR ID
     @GetMapping("/{id}")
     public ResponseEntity<FuncionarioDTO> buscarPorId(@PathVariable Long id) {
-        // O service lança exceção se não achar, então não precisamos de if/else aqui
-        // (Assumindo que existe um GlobalExceptionHandler, senão retornará 500, o que é aceitável por enquanto)
         Funcionario funcionario = service.buscarPorId(id);
         return ResponseEntity.ok(new FuncionarioDTO(funcionario));
     }
@@ -54,10 +66,8 @@ public class ApiFuncionarioController {
     // 3. CADASTRAR (Usa as regras de negócio: Log, CPF, Validação)
     @PostMapping
     public ResponseEntity<FuncionarioDTO> cadastrar(@RequestBody @Valid Funcionario dados) {
-        // Chama o service que formata CPF, valida duplicidade e gera LOG
         service.salvarComRegras(dados);
 
-        // Cria a URI para o cabeçalho Location (Padrão REST)
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
                 .buildAndExpand(dados.getId())
@@ -68,20 +78,41 @@ public class ApiFuncionarioController {
 
     // 4. ATUALIZAR
     @PutMapping("/{id}")
-    public ResponseEntity<FuncionarioDTO> atualizar(@PathVariable Long id, @RequestBody @Valid Funcionario dados) {
-        // Garante que estamos atualizando o ID correto
-        dados.setId(id);
+    public ResponseEntity<?> atualizar(@PathVariable Long id, @RequestBody Funcionario funcionarioAtualizado) {
+        try {
+            // 1. Buscar o funcionário existente no banco
+            Funcionario funcionarioExistente = funcionarioRepository.findById(id)
+                    .orElseThrow(() -> new RuntimeException("Funcionário não encontrado"));
 
-        // O Service sabe lidar com atualização (gera log de edição)
-        service.salvarComRegras(dados);
+            // 2. Buscar Setor e Cargo do banco (entidades gerenciadas)
+            Setor setor = setorRepository.findById(funcionarioAtualizado.getSetor().getId())
+                    .orElseThrow(() -> new RuntimeException("Setor não encontrado"));
 
-        return ResponseEntity.ok(new FuncionarioDTO(dados));
+            Cargo cargo = cargoRepository.findById(funcionarioAtualizado.getCargo().getId())
+                    .orElseThrow(() -> new RuntimeException("Cargo não encontrado"));
+
+            // 3. Atualizar os campos do funcionário existente
+            funcionarioExistente.setNome(funcionarioAtualizado.getNome());
+            funcionarioExistente.setCpf(funcionarioAtualizado.getCpf());
+            funcionarioExistente.setEmail(funcionarioAtualizado.getEmail());
+            funcionarioExistente.setDataAdmissao(funcionarioAtualizado.getDataAdmissao());
+            funcionarioExistente.setAtivo(funcionarioAtualizado.getAtivo());
+            funcionarioExistente.setSetor(setor);
+            funcionarioExistente.setCargo(cargo);
+
+            // 4. Salvar
+            Funcionario salvo = funcionarioRepository.save(funcionarioExistente);
+
+            return ResponseEntity.ok(new FuncionarioDTO(salvo));
+
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     // 5. EXCLUIR (Com Log de Auditoria)
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> excluir(@PathVariable Long id) {
-        // O service gera o log "EXCLUIU DEFINITIVAMENTE..." antes de apagar
         service.excluirDefinitivamente(id);
         return ResponseEntity.noContent().build();
     }

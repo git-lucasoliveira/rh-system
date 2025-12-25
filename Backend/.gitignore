@@ -1,0 +1,34 @@
+
+-
++ # ========== CONFIGURAÇÕES SENSÍVEIS (NUNCA COMMITAR) ==========
++ application-local.properties
++ .env
++
++ # ========== BUILD E DEPENDÊNCIAS ==========
++ target/
++ *.jar
++ *.war
++ *.class
++
++ # ========== LOGS ==========
++ *.log
++ logs/
++
++ # ========== IDEs ==========
++ .idea/
++ *.iml
++ *.iws
++ .vscode/
++ .classpath
++ .project
++ .settings/
++
++ # ========== SISTEMA OPERACIONAL ==========
++ .DS_Store
++ Thumbs.db
++
++ # ========== MAVEN ==========
++ .mvn/
++ mvnw
++ mvnw.cmd
++

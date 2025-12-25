@@ -14,9 +14,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
 async function carregarNavbar() {
     const placeholder = document.getElementById("nav-placeholder");
+    
+    // Se a página tem o placeholder, carrega a navbar dinâmica
     if (placeholder) {
         try {
-            // Busca o arquivo navbar.html na mesma pasta
             const response = await fetch('navbar.html');
             if (response.ok) {
                 placeholder.innerHTML = await response.text();
@@ -26,6 +27,7 @@ async function carregarNavbar() {
             }
         } catch (e) { console.error("Erro navbar:", e); }
     } else {
+        // Se não tem placeholder (ex: página de erro), roda segurança direto
         verificarAcessoGlobal();
         configurarLogout();
     }
@@ -34,7 +36,7 @@ async function carregarNavbar() {
 function verificarAcessoGlobal() {
     const token = localStorage.getItem("token");
     if (!token) {
-        window.location.href = "index.html"; // Ajustado para index.html
+        window.location.href = "index.html"; 
         return;
     }
 
@@ -44,17 +46,14 @@ function verificarAcessoGlobal() {
         // Define o Nome
         const nomeUser = payload.nome || payload.sub || "Usuário";
         
-        // --- CORREÇÃO DA LEITURA DO PERFIL ---
-        // O teu console mostrou que a chave é 'perfil' e o valor é 'RH'
+        // Define o Perfil
         let role = payload.perfil || payload.role || "USER";
-
-        // Garante que é string e maiúsculo
         role = String(role).replace('ROLE_', '').toUpperCase();
 
         // Bypass Lucas
         if (nomeUser === 'lucas' || nomeUser === 'admin') role = 'SUPERADMIN';
 
-        console.log("Perfil Detectado JS:", role); // Veja este log no F12
+        console.log("Perfil Detectado JS:", role); 
 
         atualizarNavbar(nomeUser, role);
         controlarPermissoesMenu(role);
@@ -66,19 +65,22 @@ function verificarAcessoGlobal() {
 }
 
 function atualizarNavbar(nome, role) {
-    // ... código do nome ...
+    // --- PARTE QUE FALTAVA ---
+    const nomeEl = document.getElementById("usuarioLogadoNome");
+    if (nomeEl) nomeEl.innerText = nome;
+    // -------------------------
 
     const roleEl = document.getElementById("usuarioLogadoPerfil");
     if (roleEl) {
         roleEl.innerText = role;
         roleEl.style.display = "inline-block";
-        roleEl.className = "badge ms-1"; 
+        roleEl.className = "badge ms-1"; // Classe base
 
         if (role === 'SUPERADMIN') {
             roleEl.classList.add('bg-warning', 'text-dark');
         } else if (role === 'TI') {
             roleEl.classList.add('bg-danger');
-        } else if (role === 'RH') { // <--- Verifique se este IF existe
+        } else if (role === 'RH') {
             roleEl.classList.add('bg-info', 'text-dark');
         } else {
             roleEl.classList.add('bg-secondary');
@@ -109,11 +111,9 @@ function configurarLogout() {
 
 function logoutSistema() {
     localStorage.removeItem("token");
-    // MUDANÇA AQUI: Aponta para o arquivo real do teu login
     window.location.href = "index.html"; 
 }
 
 function irParaLogin() {
-    // MUDANÇA AQUI TAMBÉM
     window.location.href = "index.html";
 }

@@ -4,14 +4,15 @@ async function fazerLogin(event) {
     const email = document.getElementById('loginEmail').value;
     const senha = document.getElementById('loginSenha').value;
     const msgErro = document.getElementById('msg-erro');
-    const btn = event.target.querySelector('button');
+    // Seleciona o botão de submit dentro do formulário
+    const btn = event.target.querySelector('button[type="submit"]');
 
-    // 1. URL de Login (Confirma se é esta no teu Java)
+    // 1. URL de Login
     const url = 'http://localhost:8080/api/auth/login'; 
-    // OBS: Se não tiveres esse endpoint criado, vamos criar no próximo passo.
 
-    // UI: Bloqueia botão e limpa erro
+    // UI: Bloqueia botão, mostra loading e limpa erro
     msgErro.classList.add('d-none');
+    const textoOriginal = btn.innerHTML; // Guarda o texto original do botão
     btn.innerHTML = '<div class="spinner-border spinner-border-sm"></div> Entrando...';
     btn.disabled = true;
 
@@ -21,17 +22,19 @@ async function fazerLogin(event) {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ login: email, senha: senha }) // Ajuste as chaves conforme seu DTO Java
+            // Atenção: As chaves 'login' e 'senha' devem ser iguais às do teu DTO em Java
+            body: JSON.stringify({ login: email, senha: senha }) 
         });
 
         if (!resposta.ok) throw new Error('Credenciais Inválidas');
 
         const dados = await resposta.json();
 
-        // 2. SUCESSO: Salva o Token (Se o teu backend retornar um token)
-        // Se o teu backend retornar só string, usa: localStorage.setItem('token', dados);
+        // 2. SUCESSO: Salva o Token
         if (dados.token) {
             localStorage.setItem('token', dados.token);
+            // Salva também o nome do utilizador se vier na resposta (opcional)
+            if(dados.nome) localStorage.setItem('usuarioNome', dados.nome);
         }
 
         // 3. Redireciona para a Home
@@ -40,8 +43,11 @@ async function fazerLogin(event) {
     } catch (erro) {
         console.error(erro);
         msgErro.classList.remove('d-none');
-        msgErro.innerText = "Falha no login: Verifique seus dados.";
         
+        // CORREÇÃO AQUI: Usamos innerHTML para manter o ícone do Bootstrap
+        msgErro.innerHTML = '<i class="bi bi-exclamation-circle-fill"></i> Falha no login: Verifique seus dados.';
+        
+        // Restaura o botão
         btn.innerHTML = 'ENTRAR NO SISTEMA';
         btn.disabled = false;
     }

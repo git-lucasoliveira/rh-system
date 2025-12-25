@@ -10,36 +10,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="assets/css/styles.css">
-
-    <style>
-        /* CSS Específico para Centralizar o Login */
-        body {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            background: var(--star-dark);
-            background-image: var(--star-gradient); /* Fundo com gradiente bonito */
-        }
-        .login-card {
-            width: 100%;
-            max-width: 400px;
-            padding: 2rem;
-            border: 1px solid var(--border-dark);
-            background-color: rgba(26, 11, 46, 0.95); /* Fundo vidro escuro */
-            backdrop-filter: blur(10px);
-        }
-        .logo-login {
-            font-size: 3rem;
-            color: var(--star-primary);
-            margin-bottom: 1rem;
-            text-shadow: 0 0 15px rgba(138, 43, 226, 0.5);
-        }
-    </style>
 </head>
-<body>
+<body class="login-page">
 
-    <div class="card login-card card-dashboard text-center">
+    <div class="card login-card text-center">
         
         <div class="mb-3">
             <i class="bi bi-stars logo-login"></i>
@@ -47,7 +21,7 @@
             <p class="text-muted small">Acesso ao Sistema de Gestão</p>
         </div>
 
-        <div id="msg-erro" class="alert alert-danger d-none text-start p-2 small">
+        <div id="msg-erro" class="alert alert-danger d-none text-start p-2 small" role="alert">
             <i class="bi bi-exclamation-circle-fill"></i> Usuário ou senha inválidos.
         </div>
 
@@ -68,7 +42,7 @@
         </form>
 
         <div class="mt-4 text-muted small">
-            <p class="mb-0">Esqueceu a senha? <a href="#" class="text-warning">Contate a TI</a></p>
+            <p class="mb-0">Esqueceu a senha? <a href="#" class="text-warning text-decoration-none">Contate a TI</a></p>
         </div>
         
     </div>

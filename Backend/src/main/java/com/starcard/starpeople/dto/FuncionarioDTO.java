@@ -2,6 +2,8 @@ package com.starcard.starpeople.dto;
 
 import com.starcard.starpeople.model.Funcionario;
 import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 
 @Data
@@ -10,8 +12,8 @@ public class FuncionarioDTO {
     private String nome;
     private String cpf;
     private String email;
-    private String setor;
-    private String cargo;
+    private SetorDTO setor;
+    private CargoDTO cargo;
     private Boolean ativo;
     private LocalDate dataAdmissao;
 
@@ -23,21 +25,38 @@ public class FuncionarioDTO {
         this.ativo = funcionario.getAtivo();
         this.dataAdmissao = funcionario.getDataAdmissao();
 
-        // CORREÇÃO AQUI:
-        // Usamos .getNome() porque no teu Model a variável chama-se 'private String nome'
-
-        // 1. Setor
+        // Setor com ID e nome
         if (funcionario.getSetor() != null) {
-            this.setor = funcionario.getSetor().getNome(); // <--- Mudado de getNomeSetor() para getNome()
-        } else {
-            this.setor = "Não Informado";
+            this.setor = new SetorDTO(
+                    funcionario.getSetor().getId(),
+                    funcionario.getSetor().getNome()
+            );
         }
 
-        // 2. Cargo (Provavelmente segue a mesma lógica do Setor)
+        // Cargo com ID e nome
         if (funcionario.getCargo() != null) {
-            this.cargo = funcionario.getCargo().getNome(); // <--- Mudado de getNomeCargo() para getNome()
-        } else {
-            this.cargo = "Não Informado";
+            this.cargo = new CargoDTO(
+                    funcionario.getCargo().getId(),
+                    funcionario.getCargo().getNome()
+            );
         }
+    }
+
+    // Classe interna para Setor
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class SetorDTO {
+        private Long id;
+        private String nome;
+    }
+
+    // Classe interna para Cargo
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class CargoDTO {
+        private Long id;
+        private String nome;
     }
 }

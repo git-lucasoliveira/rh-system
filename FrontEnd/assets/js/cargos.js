@@ -1,36 +1,10 @@
 const API_URL = "http://localhost:8080/api";
 
 document.addEventListener('DOMContentLoaded', () => {
-    const token = localStorage.getItem('token');
-    if (!token) {
-        window.location.href = 'index.html';
-        return;
-    }
-    carregarInfoUsuario(token);
+    // O app.js já verificou o token e carregou a navbar.
+    // Aqui só precisamos buscar os dados.
     carregarCargos();
 });
-
-function logout() {
-    localStorage.removeItem('token');
-    window.location.href = 'index.html';
-}
-
-function carregarInfoUsuario(token) {
-    try {
-        const payload = JSON.parse(atob(token.split('.')[1]));
-        const nome = payload.nome || payload.sub || "Usuário";
-        document.getElementById('user-name').innerText = nome;
-
-        let role = "USER";
-        if(nome === 'lucas' || nome === 'admin') role = 'SUPERADMIN';
-        
-        const badge = document.getElementById('user-role');
-        if(badge) {
-            badge.innerText = role;
-            badge.className = role === 'SUPERADMIN' ? 'badge bg-warning text-dark fw-bold ms-auto' : 'badge bg-secondary text-white ms-auto';
-        }
-    } catch(e){ console.error(e); }
-}
 
 async function carregarCargos() {
     const container = document.getElementById('conteudo-principal');
@@ -41,11 +15,14 @@ async function carregarCargos() {
 
     try {
         const token = localStorage.getItem('token');
+        // Se o token não existir aqui, o fetch falha e tratamos no catch
+        
         const res = await fetch(`${API_URL}/cargos`, {
             headers: { 'Authorization': `Bearer ${token}` }
         });
 
         if(!res.ok) throw new Error("Erro ao buscar cargos");
+        
         const lista = await res.json();
 
         if(statusMsg) statusMsg.classList.add('d-none');
@@ -53,12 +30,13 @@ async function carregarCargos() {
 
     } catch (error) {
         console.error(error);
-        if(statusMsg) statusMsg.innerHTML = `<p class="text-danger">Erro: ${error.message}</p>`;
+        if(statusMsg) statusMsg.innerHTML = `<p class="text-danger">Erro ao carregar: ${error.message}</p>`;
     }
 }
 
 function renderizarCargos(lista) {
     const container = document.getElementById('conteudo-principal');
+    container.innerHTML = "";
     
     if(lista.length === 0) {
         container.innerHTML = '<div class="col-12 text-center text-white opacity-50">Nenhum cargo cadastrado.</div>';
@@ -72,17 +50,52 @@ function renderizarCargos(lista) {
             <div class="card card-dashboard h-100 p-4 border-0 shadow-sm text-center">
                 <div class="card-body d-flex flex-column align-items-center justify-content-center">
                     
-                    <div class="rounded-circle bg-dark d-flex align-items-center justify-content-center mb-3 shadow-lg" 
-                         style="width: 60px; height: 60px; border: 1px solid var(--star-gold);">
-                        <i class="bi bi-briefcase-fill fs-3 text-warning"></i>
+                    <div class="card-icon mb-4" style="background: var(--star-gradient-gold);">
+                        <i class="bi bi-briefcase-fill"></i>
                     </div>
 
-                    <h5 class="fw-bold text-white mb-2">${cargo.nome}</h5>
-                    <span class="badge bg-white bg-opacity-10 text-white border border-secondary">ID: #${cargo.id}</span>
+                    <h5 class="fw-bold text-white mb-3">${cargo.nome}</h5>
+                    <span class="badge bg-white bg-opacity-10 text-white border border-secondary mb-3">ID: #${cargo.id}</span>
+
+                    <div class="d-flex gap-2 justify-content-center mt-auto">
+                        <a href="cargo-form.html?id=${cargo.id}" class="btn-action edit" title="Editar">
+                            <i class="bi bi-pencil-fill"></i>
+                        </a>
+                        <button onclick="excluirCargo(${cargo.id})" class="btn-action delete" title="Excluir">
+                            <i class="bi bi-trash-fill"></i>
+                        </button>
+                    </div>
 
                 </div>
             </div>
         `;
         container.appendChild(col);
     });
+}
+
+async function excluirCargo(id) {
+    showConfirmModal(
+        'Deseja realmente excluir este cargo? Esta ação não pode ser desfeita.',
+        async () => {
+            const token = localStorage.getItem('token');
+            
+            try {
+                const res = await fetch(`${API_URL}/cargos/${id}`, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+
+                if(res.ok) {
+                    showSuccess('Cargo excluído com sucesso!');
+                    carregarCargos();
+                } else {
+                    showError('Erro ao excluir cargo. Pode estar em uso por funcionários.');
+                }
+            } catch(e) {
+                console.error(e);
+                showError('Erro de conexão ao excluir cargo.');
+            }
+        },
+        'Excluir Cargo'
+    );
 }

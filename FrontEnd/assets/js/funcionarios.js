@@ -1,44 +1,25 @@
 /* * FUNCIONARIOS.JS
- * Lógica específica da tela de Lista de Colaboradores
+ * Lista de Colaboradores
  */
 
 const API_URL = "http://localhost:8080/api"; 
 let listaOriginal = [];
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Verifica token (se não tiver, o app.js já vai ter tratado, mas garantimos aqui)
-    const token = localStorage.getItem('token');
-    if (!token) return;
-
-    // 1. Descobrir permissão para desenhar os botões certos
-    const userRole = obterRoleDoToken(token);
-
-    // 2. Iniciar carregamentos
-    carregarSetoresNoFiltro(token);
-    carregarDados(token, userRole);
+    // 1. Inicia carregamentos (O app.js já validou o acesso básico)
+    carregarSetoresNoFiltro();
+    carregarDados();
 });
 
-// Função auxiliar para ler o cargo (Repetimos aqui para uso local na renderização)
-function obterRoleDoToken(token) {
-    try {
-        const payload = JSON.parse(atob(token.split('.')[1]));
-        const nomeUser = payload.nome || payload.sub || "";
-        
-        let role = payload.perfil || payload.role || (payload.authorities ? payload.authorities[0] : "USER");
-        role = role.replace('ROLE_', '').toUpperCase();
-
-        // Bypass Lucas/Admin
-        if (nomeUser === 'lucas' || nomeUser === 'admin') role = 'SUPERADMIN';
-        
-        return role;
-    } catch (e) { return "USER"; }
-}
-
 // --- CARREGAR DADOS ---
-async function carregarDados(token, userRole) {
+async function carregarDados() {
     const container = document.getElementById('conteudo-principal');
     const statusMsg = document.getElementById('status-msg');
+    const token = localStorage.getItem('token');
     
+    // Pequena verificação local de permissão para botões
+    const userRole = obterRoleLocal(token);
+
     if(statusMsg) statusMsg.classList.remove('d-none');
     if(container) container.innerHTML = ""; 
 
@@ -62,7 +43,8 @@ async function carregarDados(token, userRole) {
 }
 
 // --- CARREGAR SETORES (FILTRO) ---
-async function carregarSetoresNoFiltro(token) {
+async function carregarSetoresNoFiltro() {
+    const token = localStorage.getItem('token');
     try {
         const res = await fetch(`${API_URL}/setores`, { headers: { 'Authorization': `Bearer ${token}` } });
         if(res.ok) {
@@ -87,9 +69,8 @@ function aplicarFiltros() {
     const setorNome = document.getElementById('filtro-setor').value;
     const status = document.getElementById('filtro-status').value;
 
-    // Recupera role para redesenhar os botões corretamente
     const token = localStorage.getItem('token');
-    const userRole = obterRoleDoToken(token);
+    const userRole = obterRoleLocal(token);
 
     const listaFiltrada = listaOriginal.filter(p => {
         const matchTexto = (p.nome && p.nome.toLowerCase().includes(texto)) || 
@@ -98,7 +79,7 @@ function aplicarFiltros() {
 
         let matchSetor = true;
         if (setorNome !== "") {
-            matchSetor = p.setor && p.setor.nome === setorNome; // Ajustado para objeto setor
+            matchSetor = p.setor && p.setor.nome === setorNome;
         }
 
         let matchStatus = true;
@@ -119,7 +100,14 @@ function limparFiltros() {
     aplicarFiltros();
 }
 
-// --- RENDERIZAR CARDS ---
+// Debounce para filtro de texto
+let filterTimeout;
+function debounceFilter() {
+    clearTimeout(filterTimeout);
+    filterTimeout = setTimeout(aplicarFiltros, 300);
+}
+
+// --- RENDERIZAR CARDS (Design Moderno Showcase - OTIMIZADO) ---
 function mostrarNaTela(lista, userRole) {
     const container = document.getElementById('conteudo-principal');
     container.innerHTML = "";
@@ -129,101 +117,176 @@ function mostrarNaTela(lista, userRole) {
         return;
     }
 
+    // Usar DocumentFragment para melhor performance
+    const fragment = document.createDocumentFragment();
+
     lista.forEach(p => {
-        const nomeSetor = p.setor ? p.setor.nome : "-";
-        const nomeCargo = p.cargo ? p.cargo.nome : "-";
+        const nomeCargo = (p.cargo && typeof p.cargo === 'object') ? p.cargo.nome : (p.cargo || "-");
+        const nomeSetor = (p.setor && typeof p.setor === 'object') ? p.setor.nome : (p.setor || "-");
         const isAtivo = p.ativo === true;
 
+        // Badge moderno com ícone
         const badgeStatus = isAtivo
-            ? '<span class="badge bg-success bg-opacity-25 text-success border border-success">ATIVO</span>' 
-            : '<span class="badge bg-danger bg-opacity-25 text-danger border border-danger">INATIVO</span>';
+            ? '<span class="status-badge ativo"><i class="bi bi-check-circle-fill"></i> ATIVO</span>' 
+            : '<span class="status-badge inativo"><i class="bi bi-x-circle-fill"></i> INATIVO</span>';
 
-        // LÓGICA DE BOTÕES POR PERFIL
+        // Botões de ação modernos
+        const btnEditar = `<a href="funcionario-form.html?id=${p.id}" class="btn-action edit" title="Editar"><i class="bi bi-pencil-fill"></i></a>`;
         
-        // Editar: Todos veem (conforme sua regra)
-        const btnEditar = `<a href="funcionario-form.html?id=${p.id}" class="btn btn-outline-warning btn-sm" title="Editar"><i class="bi bi-pencil"></i></a>`;
-        
-        // Status (Ativar/Inativar): Talvez queira restringir também, mas deixei padrão
         const btnStatus = `
-            <button onclick="alterarStatus(${p.id}, ${isAtivo})" class="btn ${isAtivo ? 'btn-outline-danger' : 'btn-outline-success'} btn-sm" title="${isAtivo ? 'Inativar' : 'Ativar'}">
-                <i class="bi ${isAtivo ? 'bi-slash-circle' : 'bi-check-circle'}"></i>
+            <button onclick="alterarStatus(${p.id}, ${isAtivo})" class="btn-action toggle" title="${isAtivo ? 'Inativar' : 'Ativar'}">
+                <i class="bi bi-arrow-repeat"></i>
             </button>`;
 
-        // Excluir: APENAS SUPERADMIN
+        // Botão Excluir: Só SUPERADMIN vê
         let btnExcluir = '';
         if (userRole === 'SUPERADMIN') {
             btnExcluir = `
-                <button onclick="excluirFuncionario(${p.id})" class="btn btn-outline-secondary btn-sm ms-1" title="Excluir">
-                    <i class="bi bi-trash"></i>
+                <button onclick="excluirFuncionario(${p.id})" class="btn-action delete" title="Excluir">
+                    <i class="bi bi-trash-fill"></i>
                 </button>`;
         }
 
         const coluna = document.createElement('div');
-        coluna.className = 'col-md-6 col-lg-3 mb-4'; 
+        coluna.className = 'col-md-6 col-lg-4'; 
         
         coluna.innerHTML = `
-            <div class="card card-dashboard h-100 p-3 border-0 shadow-sm">
-                <div class="card-body text-center d-flex flex-column align-items-center">
-                    
-                    <div class="rounded-circle bg-dark d-flex align-items-center justify-content-center mb-3 shadow-lg" 
-                         style="width: 70px; height: 70px; border: 2px solid #6f42c1;">
-                        <i class="bi bi-person-fill fs-2 text-white"></i>
+            <div class="card-dashboard colaborador-card">
+                <div class="text-center mb-3">
+                    <div class="avatar-circle mx-auto">
+                        <i class="bi bi-person-fill"></i>
                     </div>
-
-                    <h6 class="card-title fw-bold text-white mb-1 w-100 text-truncate">${p.nome}</h6>
-                    <small class="text-white opacity-50 mb-3 w-100 text-truncate">${p.email}</small>
-                    
-                    <div class="w-100 mb-3 bg-white bg-opacity-10 rounded p-2">
-                        <span class="d-block fw-bold text-white small mb-1 text-truncate">${nomeCargo}</span>
-                        <small class="text-uppercase text-warning opacity-75 fw-bold" style="font-size: 0.7em;">${nomeSetor}</small>
+                </div>
+                
+                <h5 class="text-white text-center mb-2">${p.nome || 'Sem Nome'}</h5>
+                <p class="text-muted text-center small mb-3">
+                    <i class="bi bi-envelope me-1"></i>
+                    ${p.email || 'sem@email.com'}
+                </p>
+                
+                <div class="d-flex justify-content-between align-items-center mb-3 pb-3 border-bottom border-secondary border-opacity-25">
+                    <div>
+                        <small class="text-muted d-block mb-1">Cargo</small>
+                        <strong class="text-white small">${nomeCargo}</strong>
                     </div>
-
-                    <div class="mt-auto w-100 d-flex justify-content-between align-items-center border-top border-secondary border-opacity-25 pt-3">
-                        <div>${badgeStatus}</div>
-                        <div class="d-flex gap-1">
-                            ${btnEditar}${btnStatus}${btnExcluir}
-                        </div>
+                    <div class="text-end">
+                        <small class="text-muted d-block mb-1">Setor</small>
+                        <strong class="text-white small">${nomeSetor}</strong>
+                    </div>
+                </div>
+                
+                <div class="d-flex justify-content-between align-items-center">
+                    ${badgeStatus}
+                    
+                    <div class="d-flex gap-2">
+                        ${btnEditar}
+                        ${btnStatus}
+                        ${btnExcluir}
                     </div>
                 </div>
             </div>`;
-        container.appendChild(coluna);
+        fragment.appendChild(coluna);
     });
+    
+    // Append tudo de uma vez (mais rápido)
+    container.appendChild(fragment);
 }
 
 // --- AÇÕES ---
 async function alterarStatus(id, statusAtual) {
-    if(!confirm("Deseja alterar o status deste colaborador?")) return;
-    const token = localStorage.getItem('token');
-    
-    // Aqui assumo que o backend espera o objeto completo ou tem endpoint específico
-    // Simplificando para buscar, inverter e salvar
-    try {
-        const resGet = await fetch(`${API_URL}/funcionarios/${id}`, {headers:{'Authorization':`Bearer ${token}`}});
-        const funcionario = await resGet.json();
-        
-        funcionario.ativo = !statusAtual;
+    const acao = statusAtual ? 'inativar' : 'ativar';
+    showConfirmModal(
+        `Deseja ${acao} este colaborador?`,
+        async () => {
+            const token = localStorage.getItem('token');
+            
+            try {
+                const resGet = await fetch(`${API_URL}/funcionarios/${id}`, {headers:{'Authorization':`Bearer ${token}`}});
+                const funcionario = await resGet.json();
+                
+                console.log('Funcionário recebido do backend:', funcionario);
+                
+                // Extrair IDs corretamente (pode vir como funcionario.setor.id ou funcionario.setorId)
+                const setorId = funcionario.setor?.id || funcionario.setorId;
+                const cargoId = funcionario.cargo?.id || funcionario.cargoId;
+                
+                // Se os IDs ainda forem strings (nomes), precisamos buscar do listaOriginal
+                const func = listaOriginal.find(f => f.id === id);
+                const setorIdFinal = (typeof setorId === 'number') ? setorId : func?.setor?.id;
+                const cargoIdFinal = (typeof cargoId === 'number') ? cargoId : func?.cargo?.id;
+                
+                // Formatar objeto corretamente para enviar ao backend
+                const funcionarioAtualizado = {
+                    nome: funcionario.nome,
+                    cpf: funcionario.cpf,
+                    email: funcionario.email,
+                    dataAdmissao: funcionario.dataAdmissao,
+                    ativo: !statusAtual,
+                    setor: { id: setorIdFinal },
+                    cargo: { id: cargoIdFinal }
+                };
 
-        const resPut = await fetch(`${API_URL}/funcionarios/${id}`, {
-            method: 'PUT',
-            headers: {'Authorization':`Bearer ${token}`,'Content-Type':'application/json'},
-            body: JSON.stringify(funcionario)
-        });
+                console.log('Enviando para backend:', funcionarioAtualizado);
 
-        if(resPut.ok) location.reload();
-        else alert("Erro ao atualizar status");
+                const resPut = await fetch(`${API_URL}/funcionarios/${id}`, {
+                    method: 'PUT',
+                    headers: {'Authorization':`Bearer ${token}`,'Content-Type':'application/json'},
+                    body: JSON.stringify(funcionarioAtualizado)
+                });
 
-    } catch(e){ console.error(e); }
+                if(resPut.ok) {
+                    showSuccess(`Colaborador ${acao === 'ativar' ? 'ativado' : 'inativado'} com sucesso!`);
+                    carregarDados();
+                } else {
+                    const erro = await resPut.text();
+                    console.error('Erro do backend:', erro);
+                    showError(`Erro ao atualizar: ${erro}`);
+                }
+
+            } catch(e) {
+                console.error('Erro completo:', e);
+                showError("Erro de conexão");
+            }
+        },
+        `${statusAtual ? 'Inativar' : 'Ativar'} Colaborador`
+    );
 }
 
 async function excluirFuncionario(id) {
-    if(!confirm("Excluir permanentemente este colaborador?")) return;
-    const token = localStorage.getItem('token');
+    showConfirmModal(
+        'Deseja realmente excluir este colaborador permanentemente? Esta ação não pode ser desfeita.',
+        async () => {
+            const token = localStorage.getItem('token');
+            try {
+                const res = await fetch(`${API_URL}/funcionarios/${id}`, {
+                    method: 'DELETE', 
+                    headers:{'Authorization':`Bearer ${token}`}
+                });
+                if(res.ok) {
+                    showSuccess('Colaborador excluído com sucesso!');
+                    carregarDados();
+                } else {
+                    showError("Erro ao excluir. Verifique permissões.");
+                }
+            } catch(e) {
+                console.error(e);
+                showError("Erro de conexão");
+            }
+        },
+        'Excluir Colaborador'
+    );
+}
+
+// Helper local apenas para decidir botões
+function obterRoleLocal(token) {
     try {
-        const res = await fetch(`${API_URL}/funcionarios/${id}`, {
-            method: 'DELETE', 
-            headers:{'Authorization':`Bearer ${token}`}
-        });
-        if(res.ok) location.reload();
-        else alert("Erro ao excluir. Verifique permissões.");
-    } catch(e) { console.error(e); }
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        const nomeUser = payload.nome || payload.sub || "";
+        
+        let role = payload.perfil || payload.role || "USER";
+        role = String(role).replace('ROLE_', '').toUpperCase();
+
+        if (nomeUser === 'lucas' || nomeUser === 'admin') role = 'SUPERADMIN';
+        return role;
+    } catch (e) { return "USER"; }
 }

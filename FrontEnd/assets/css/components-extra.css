@@ -1,0 +1,214 @@
+/* ========== COMPONENTES EXTRAS E UTILIT ÁRIOS ========== */
+
+/* Spinner de Carregamento Customizado */
+.spinner-border {
+    border-color: var(--star-primary);
+    border-right-color: transparent !important;
+    animation: spin 0.75s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Alertas Customizados */
+.alert {
+    border-radius: var(--radius-md);
+    border: 1px solid;
+    font-weight: 500;
+}
+
+.alert-success {
+    background: rgba(16, 185, 129, 0.15);
+    border-color: var(--success);
+    color: #6ee7b7;
+}
+
+.alert-danger {
+    background: rgba(239, 68, 68, 0.15);
+    border-color: var(--danger);
+    color: #fca5a5;
+}
+
+.alert-warning {
+    background: rgba(245, 158, 11, 0.15);
+    border-color: var(--warning);
+    color: #fcd34d;
+}
+
+.alert-info {
+    background: rgba(6, 182, 212, 0.15);
+    border-color: var(--info);
+    color: #67e8f9;
+}
+
+/* Container de Cards de Colaboradores */
+.colaborador-card {
+    background: var(--star-gradient-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    transition: transform 0.15s ease;
+}
+
+.colaborador-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--border-accent);
+}
+
+/* Avatar Círculo */
+.avatar-circle {
+    width: 60px;
+    height: 60px;
+    border-radius: var(--radius-full);
+    background: var(--star-gradient-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: white;
+    box-shadow: var(--shadow-md);
+}
+
+/* Footer */
+footer {
+    margin-top: 4rem;
+    padding: 2rem 0;
+    border-top: 1px solid var(--border-subtle);
+    color: var(--text-muted);
+    font-size: 0.875rem;
+}
+
+/* Scroll Bar Customizada */
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--star-dark);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--star-primary);
+    border-radius: var(--radius-full);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--star-primary-light);
+}
+
+/* Badges em Cards de Colaboradores */
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-full);
+    font-weight: 600;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+}
+
+.status-badge.ativo {
+    background: linear-gradient(135deg, var(--success) 0%, var(--success-dark) 100%);
+    color: white;
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+.status-badge.inativo {
+    background: rgba(107, 114, 128, 0.3);
+    color: var(--text-muted);
+    border: 1px solid var(--text-faded);
+}
+
+/* Botões de Ação nos Cards */
+.btn-action {
+    width: 36px;
+    height: 36px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-sm);
+    border: none;
+    transition: background 0.15s ease, color 0.15s ease;
+    cursor: pointer;
+}
+
+.btn-action.edit {
+    background: rgba(245, 158, 11, 0.2);
+    color: var(--warning);
+}
+
+.btn-action.edit:hover {
+    background: var(--warning);
+    color: #000;
+}
+
+.btn-action.delete {
+    background: rgba(239, 68, 68, 0.2);
+    color: var(--danger);
+}
+
+.btn-action.delete:hover {
+    background: var(--danger);
+    color: white;
+}
+
+.btn-action.toggle {
+    background: rgba(6, 182, 212, 0.2);
+    color: var(--info);
+}
+
+.btn-action.toggle:hover {
+    background: var(--info);
+    color: white;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .navbar-star .navbar-brand {
+        font-size: 1.25rem;
+    }
+    
+    .card-dashboard {
+        margin-bottom: 1rem;
+    }
+    
+    h1 { font-size: 2rem; }
+    h2 { font-size: 1.75rem; }
+    
+    .login-card {
+        padding: 2rem;
+    }
+}
+
+/* Animações de Entrada */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in-up {
+    opacity: 1;
+}
+
+/* Hover Effect para Links */
+a {
+    transition: all var(--transition-fast);
+}
+
+a:hover {
+    text-decoration: none;
+}
+
+.hover-effect:hover {
+    transform: translateY(-2px);
+    text-shadow: 0 0 10px rgba(138, 43, 226, 0.5);
+}
