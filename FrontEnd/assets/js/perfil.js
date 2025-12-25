@@ -51,30 +51,32 @@ async function alterarSenha(e) {
     const btn = document.getElementById('btn-salvar');
 
     if (nova !== confirma) {
-        mostrarMsg("As senhas não coincidem!", "danger");
+        showWarning("As senhas não coincidem!");
         return;
     }
 
-    // Mock: Simulação de troca de senha
-    btn.disabled = true;
-    btn.innerHTML = "Salvando...";
+    if (nova.length < 3) {
+        showWarning("A senha deve ter no mínimo 3 caracteres!");
+        return;
+    }
 
+    setButtonLoading(btn, true);
+
+    // Mock: Simulação de troca de senha
     setTimeout(() => {
-        mostrarMsg("Senha alterada com sucesso!", "success");
+        showSuccess("Senha alterada com sucesso!");
         document.getElementById('form-senha').reset();
-        btn.disabled = false;
-        btn.innerHTML = '<i class="bi bi-check2-circle"></i> Salvar Nova Senha';
+        setButtonLoading(btn, false);
     }, 1000);
 }
 
 function mostrarMsg(texto, tipo) {
+    // Função legada mantida para compatibilidade
     const div = document.getElementById('msg-feedback');
     if(div) {
-        div.className = `alert alert-${tipo} text-center small`;
+        div.className = `alert alert-${tipo} text-center`;
         div.innerText = texto;
         div.classList.remove('d-none');
         setTimeout(() => div.classList.add('d-none'), 3000);
-    } else {
-        alert(texto);
     }
 }
