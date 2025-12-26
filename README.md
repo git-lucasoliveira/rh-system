@@ -86,7 +86,7 @@ cd lorhs
 
 **Criar o banco no SQL Server:**
 ```sql
-CREATE DATABASE StarPeopleDB;
+CREATE DATABASE SeuBancoDB;
 GO
 ```
 
@@ -255,9 +255,9 @@ Sistema desenvolvido como projeto pessoal de gestão de RH.
 ## 🆘 Suporte
 
 Para dúvidas ou sugestões, entre em contato:
-- 📧 E-mail: seu-email@exemplo.com
-- 💼 LinkedIn: [Seu LinkedIn](https://linkedin.com/in/seu-perfil)
-- 🐙 GitHub: [Seu GitHub](https://github.com/seu-usuario)
+- 📧 E-mail: lucasoliveiraa120505@gmail.com
+- 💼 LinkedIn: [Seu LinkedIn](https://linkedin.com/in/lucasoliveiraamorim/)
+- 🐙 GitHub: [Seu GitHub](https://github.com/git-lucasoliveira)
 
 ---
 
