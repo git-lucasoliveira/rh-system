@@ -256,8 +256,8 @@ Sistema desenvolvido como projeto pessoal de gestão de RH.
 
 Para dúvidas ou sugestões, entre em contato:
 - 📧 E-mail: lucasoliveiraa120505@gmail.com
-- 💼 LinkedIn: [Seu LinkedIn](https://linkedin.com/in/lucasoliveiraamorim/)
-- 🐙 GitHub: [Seu GitHub](https://github.com/git-lucasoliveira)
+- 💼 LinkedIn: [Meu LinkedIn](https://linkedin.com/in/lucasoliveiraamorim/)
+- 🐙 GitHub: [Meu GitHub](https://github.com/git-lucasoliveira)
 
 ---
 
