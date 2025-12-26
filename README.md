@@ -1,260 +1,268 @@
-﻿#  StarPeople - Sistema de Gestão de Pessoas
+﻿# 🎯 LORHS - Lucas Oliveira RH System
 
-Sistema completo de gestão de colaboradores desenvolvido para o **Grupo Starbank**, com arquitetura full-stack moderna e segura.
+> **Gestão Inteligente de Pessoas**
 
----
-
-##  Sobre o Projeto
-
-**StarPeople** é uma aplicação corporativa para gestão completa de recursos humanos, incluindo:
-
--  **Gestão de Colaboradores** - Cadastro, edição, inativação e exclusão  
--  **Organização Empresarial** - Setores e cargos  
--  **Controle de Acesso** - Sistema de autenticação com 3 perfis (SUPERADMIN, TI, RH)  
--  **Auditoria** - Logs completos de todas as operações  
--  **Interface Moderna** - Design responsivo e intuitivo  
--  **Performance Otimizada** - Requisições rápidas e UX fluida
+Sistema completo de **Gestão de Recursos Humanos** desenvolvido com **Spring Boot** (Backend) e **JavaScript Vanilla** (Frontend). Solução moderna e robusta para gerenciamento de colaboradores, setores, cargos e auditoria.
 
 ---
 
-##  Arquitetura do Sistema
+## 🚀 Tecnologias Utilizadas
 
-```
-StarPeople-Sistema/
+### Backend
+- **Java 17** com Spring Boot 3.x
+- **Spring Security** + JWT para autenticação
+- **JPA/Hibernate** para ORM
+- **SQL Server** como banco de dados
+- **Swagger/OpenAPI** para documentação da API
+- **Lombok** para redução de boilerplate
+- **Bean Validation** para validações
 
- Backend/                    # API REST - Spring Boot
-    src/main/java/
-       com/starcard/starpeople/
-           config/         # Segurança e configurações
-           controller/     # Endpoints REST
-           model/          # Entidades JPA
-           repository/     # Acesso a dados
-           service/        # Lógica de negócio
-           dto/            # Data Transfer Objects
-    README.md              #  Documentação Backend
-
- Frontend/                   # SPA - Vanilla JavaScript
-    *.html                 # Páginas da aplicação
-    assets/
-       css/               # Estilos (CSS Variables)
-       js/                # Lógica JavaScript
-    README.md              #  Documentação Frontend
-
- README.md                  #  Este arquivo (Visão Geral)
-```
+### Frontend
+- **HTML5**, **CSS3**, **JavaScript (ES6+)**
+- **Bootstrap 5.3** para UI responsiva
+- **Bootstrap Icons** para iconografia
+- **Fetch API** para requisições HTTP
+- **LocalStorage** para gerenciamento de sessão
 
 ---
 
-##  Stack Tecnológica
+## ✨ Funcionalidades
 
-### Backend (API REST)
-- Java 17+
-- Spring Boot 3.x
-- Spring Security 6.x  
-- Spring Data JPA
-- SQL Server
-- JWT Authentication
-- Lombok
+### 👥 Gestão de Colaboradores
+- ✅ Cadastro completo (dados pessoais, contato, cargo, setor)
+- ✅ Listagem com filtros avançados (nome, setor, status)
+- ✅ Edição e exclusão
+- ✅ Controle de status (Ativo/Inativo)
+- ✅ Validações de CPF e e-mail
 
-### Frontend (SPA)
-- HTML5 + CSS3
-- JavaScript (Vanilla ES6+)
-- Bootstrap 5.3.0
-- Bootstrap Icons 1.11.3
+### 🏢 Gestão de Setores
+- ✅ Criação de departamentos
+- ✅ Listagem em cards visuais
+- ✅ Edição e exclusão
 
----
+### 💼 Gestão de Cargos
+- ✅ Cadastro de funções
+- ✅ Descrição detalhada
+- ✅ Vinculação com colaboradores
 
-##  Funcionalidades Principais
+### 🔐 Autenticação e Segurança
+- ✅ Login com JWT Token
+- ✅ Controle de sessão
+- ✅ Perfis de acesso (ADMIN e USER)
+- ✅ Proteção de rotas
 
-###  Gestão de Colaboradores
--  Cadastro completo (nome, CPF, email, data admissão)
--  Edição de dados cadastrais
--  Inativação/Ativação de colaboradores  
--  Exclusão definitiva (apenas SUPERADMIN)
--  Filtros avançados (nome, setor, status)
--  Validação de CPF e email
+### 📊 Dashboard
+- ✅ Estatísticas em tempo real
+- ✅ Total de colaboradores, setores e cargos
+- ✅ Ações rápidas
 
-###  Gestão Organizacional
--  CRUD de Setores
--  CRUD de Cargos
--  Permissões por perfil
+### 📝 Auditoria
+- ✅ Logs de todas as ações (CRUD)
+- ✅ Rastreamento de usuário e timestamp
+- ✅ Histórico completo do sistema
 
-###  Controle de Acesso
-
-| Perfil | Permissões |
-|--------|-----------|
-| **SUPERADMIN**  | Acesso total: CRUD em tudo, logs, usuários |
-| **TI**  | CRUD Funcionários/Setores/Cargos (exceto DELETE Setor/Cargo) |
-| **RH**  | GET e PUT em Funcionários, GET em Setores/Cargos |
-
-###  Logs de Auditoria
-- Registro de todas as operações críticas
-- Identificação do usuário responsável
-- Data e hora precisas
-- Visualização apenas para SUPERADMIN
+### 👤 Perfil do Usuário
+- ✅ Visualização de dados da conta
+- ✅ Alteração de senha
+- ✅ Segurança por senha atual
 
 ---
 
-##  Instalação Rápida
+## 📦 Instalação e Configuração
 
 ### Pré-requisitos
-- Java 17+
-- Maven 3.6+
-- SQL Server (localhost:1433)
-- Navegador moderno
+- **Java 17+** instalado
+- **Maven 3.8+** instalado
+- **SQL Server** (local ou remoto)
+- **Node.js** (apenas se usar servidor local para o frontend)
 
-### 1. Backend
+### 1️⃣ Clonar o Repositório
+```bash
+git clone https://github.com/seu-usuario/lorhs.git
+cd lorhs
+```
 
+### 2️⃣ Configurar Banco de Dados
+
+**Criar o banco no SQL Server:**
+```sql
+CREATE DATABASE StarPeopleDB;
+GO
+```
+
+**Editar `Backend/src/main/resources/application-local.properties`:**
+```properties
+spring.datasource.url=jdbc:sqlserver://localhost:1433;databaseName=StarPeopleDB;encrypt=true;trustServerCertificate=true;
+spring.datasource.username=seu_usuario
+spring.datasource.password=sua_senha
+
+# JWT Secret (Gerar uma chave segura)
+api.security.token.secret=SUA_CHAVE_SECRETA_AQUI_64_CARACTERES_MINIMO
+```
+
+### 3️⃣ Executar o Backend
 ```bash
 cd Backend
-# Configurar application-local.properties com suas credenciais
 mvn clean install
 mvn spring-boot:run
 ```
 
- Rodando em: http://localhost:8080
+A API estará disponível em: **http://localhost:8080**
 
-### 2. Frontend
+Documentação Swagger: **http://localhost:8080/swagger-ui.html**
 
+### 4️⃣ Executar o Frontend
+
+**Opção 1: Live Server (VS Code)**
+1. Instale a extensão **Live Server**
+2. Abra `FrontEnd/index.html`
+3. Clique em **Go Live** (canto inferior direito)
+
+**Opção 2: Servidor Python**
 ```bash
-cd Frontend
-# Abrir com Live Server ou: python -m http.server 5500
+cd FrontEnd
+python -m http.server 5500
 ```
 
- Rodando em: http://localhost:5500
-
-### 3. Login Padrão (desenvolvimento)
-- **Login:** admin
-- **Senha:** admin123
+Acesse: **http://localhost:5500**
 
 ---
 
-##  Documentação Detalhada
+## 🔑 Credenciais Padrão
 
--  [Backend README](./Backend/README.md) - API, endpoints, segurança, banco de dados
--  [Frontend README](./Frontend/README.md) - Componentes, estrutura, notificações
-
----
-
-##  Segurança
-
-### Medidas Implementadas
--  Autenticação JWT (2h de expiração)
--  Senhas criptografadas com BCrypt
--  CORS configurado
--  Autorização baseada em perfis
--  Validação de dados (frontend + backend)
--  Logs de auditoria
--  Proteção contra SQL Injection
--  XSS Prevention
-
-###  Checklist de Produção
-- [ ] Trocar senhas padrão
-- [ ] Gerar JWT secret único (64+ caracteres)
-- [ ] Configurar HTTPS/SSL
-- [ ] Implementar rate limiting
-- [ ] Backup automático do banco
-- [ ] Política de rotação de senhas
-
----
-
-##  Design System
-
-### Paleta de Cores
-- **Fundo Principal:** #0a0e27
-- **Fundo Secundário:** #1a1f3a
-- **Azul Primário:** #3b82f6
-- **Roxo Secundário:** #8b5cf6
-- **Verde Sucesso:** #10b981
-- **Vermelho Erro:** #ef4444
-
-### Tipografia
-- **Fonte:** Inter (Google Fonts)
-- **Pesos:** 300, 400, 500, 600, 700, 800
-
----
-
-##  Performance
-
-### Otimizações
--  Transições CSS simplificadas (0.2s ease)
--  Animações com requestAnimationFrame
--  Debounce em filtros (300ms)
--  Renderização em lote (DocumentFragment)
--  Removido backdrop-filter blur pesado
-
-**Resultado:** ~60 FPS constante, interface fluida
-
----
-
-##  Estrutura do Banco de Dados
+Ao iniciar o sistema pela primeira vez, um usuário admin é criado automaticamente:
 
 ```
-funcionarios  setores
-             cargos
+Usuário: admin
+Senha: admin123
+```
 
-usuarios (login, senha, perfil)
-log_sistema (usuario, acao, data_hora)
+⚠️ **IMPORTANTE**: Altere a senha padrão imediatamente após o primeiro login!
+
+---
+
+## 📁 Estrutura do Projeto
+
+```
+rh-system/
+├── Backend/
+│   ├── src/main/java/com/starcard/starpeople/
+│   │   ├── config/          # Configurações (Security, CORS, Dados iniciais)
+│   │   ├── controller/      # Controllers REST
+│   │   ├── model/           # Entidades JPA
+│   │   ├── repository/      # Repositories Spring Data
+│   │   ├── service/         # Lógica de negócio
+│   │   └── dto/             # DTOs e Records
+│   └── src/main/resources/
+│       ├── application.properties
+│       └── application-local.properties
+│
+└── FrontEnd/
+    ├── index.html           # Login
+    ├── home.html            # Dashboard
+    ├── funcionarios.html    # Lista de colaboradores
+    ├── setores.html         # Gestão de setores
+    ├── cargos.html          # Gestão de cargos
+    ├── logs.html            # Auditoria
+    ├── perfil.html          # Perfil do usuário
+    └── assets/
+        ├── css/
+        │   ├── styles.css            # Estilos principais
+        │   ├── components-extra.css  # Componentes extras
+        │   └── notifications.css     # Sistema de toasts
+        └── js/
+            ├── app.js                # Global (navbar, auth)
+            ├── login.js              # Autenticação
+            ├── home.js               # Dashboard
+            ├── funcionarios.js       # CRUD colaboradores
+            ├── setores.js            # CRUD setores
+            ├── cargos.js             # CRUD cargos
+            └── notifications.js      # Sistema de notificações
 ```
 
 ---
 
-##  Testes
+## 🎨 Paleta de Cores (Tema Azul Premium)
 
-### Funcionalidades Validadas
-- [x] Autenticação e autorização
-- [x] CRUD completo de colaboradores
-- [x] CRUD de setores e cargos
-- [x] Filtros e busca
-- [x] Validações (CPF, email)
-- [x] Sistema de notificações
-- [x] Logs de auditoria
-- [x] Permissões por perfil
-
----
-
-##  Troubleshooting
-
-### Backend não inicia
-**Erro:** Cannot create PoolableConnectionFactory  
-**Solução:** Verificar SQL Server rodando e credenciais em application-local.properties
-
-### Frontend 401/403
-**Erro:** Unauthorized/Forbidden  
-**Solução:** Fazer login novamente ou verificar permissões do usuário
-
-### CORS Error
-**Solução:** Verificar SecurityConfigurations.java  corsConfigurationSource()
+```css
+Primária:     #0ea5e9 (Azul Céu)
+Secundária:   #22d3ee (Ciano)
+Sucesso:      #10b981 (Verde)
+Perigo:       #ef4444 (Vermelho)
+Fundo Dark:   #050b1a (Azul Escuro)
+Cards:        #0f1e35 (Azul Médio)
+```
 
 ---
 
-##  Roadmap Futuro
+## 🔐 Endpoints da API
 
-- [ ] Dashboard com gráficos
+### Autenticação
+- `POST /auth/login` - Login (retorna JWT)
+- `POST /auth/register` - Registro de novo usuário
+
+### Colaboradores
+- `GET /api/funcionarios` - Listar todos
+- `GET /api/funcionarios/{id}` - Buscar por ID
+- `POST /api/funcionarios` - Criar novo
+- `PUT /api/funcionarios/{id}` - Atualizar
+- `DELETE /api/funcionarios/{id}` - Deletar
+
+### Setores
+- `GET /api/setores` - Listar todos
+- `POST /api/setores` - Criar novo
+- `PUT /api/setores/{id}` - Atualizar
+- `DELETE /api/setores/{id}` - Deletar
+
+### Cargos
+- `GET /api/cargos` - Listar todos
+- `POST /api/cargos` - Criar novo
+- `PUT /api/cargos/{id}` - Atualizar
+- `DELETE /api/cargos/{id}` - Deletar
+
+### Logs
+- `GET /api/logs` - Histórico de auditoria
+
+---
+
+## 🛠️ Melhorias Futuras
+
 - [ ] Exportação de relatórios (PDF, Excel)
-- [ ] Gestão de férias e licenças
-- [ ] Upload de foto de perfil
-- [ ] Integração com Active Directory
-- [ ] App mobile (React Native)
-- [ ] Modo claro (light theme)
+- [ ] Dashboard com gráficos (Chart.js)
+- [ ] Sistema de notificações em tempo real (WebSocket)
+- [ ] Upload de foto de perfil para colaboradores
+- [ ] Gestão de férias e folgas
+- [ ] Controle de ponto eletrônico
+- [ ] Integração com e-mail (SMTP)
+- [ ] Testes unitários (JUnit + Mockito)
+- [ ] Deploy em produção (Docker + Kubernetes)
 
 ---
 
-##  Licença
+## 📄 Licença
 
-© 2025 Grupo Starbank - Sistema Interno
-
-**Uso Restrito:** Propriedade do Grupo Starbank, destinado exclusivamente ao uso interno.
+Este projeto é de propriedade de **Lucas Oliveira** e destina-se a fins educacionais e comerciais.
 
 ---
 
-##  Equipe
+## 👨‍💻 Desenvolvedor
 
-**Desenvolvimento:** Equipe de TI - Grupo Starbank  
-**Suporte:** ti@starbank.com.br  
-**Versão:** 1.0.0  
-**Data:** Dezembro 2025
+**Lucas Oliveira**  
+Sistema desenvolvido como projeto pessoal de gestão de RH.
 
 ---
 
-**Feito com  pela equipe de TI do Grupo Starbank**
+## 🆘 Suporte
+
+Para dúvidas ou sugestões, entre em contato:
+- 📧 E-mail: seu-email@exemplo.com
+- 💼 LinkedIn: [Seu LinkedIn](https://linkedin.com/in/seu-perfil)
+- 🐙 GitHub: [Seu GitHub](https://github.com/seu-usuario)
+
+---
+
+<div align="center">
+  <strong>LORHS v2.0</strong> - Gestão Inteligente de Pessoas 🎯
+  <br>
+  &copy; 2025 Lucas Oliveira | Todos os direitos reservados
+</div>

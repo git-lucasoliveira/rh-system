@@ -2,7 +2,7 @@ const API_URL = "http://localhost:8080/api";
 
 document.addEventListener("DOMContentLoaded", () => {
     // 1. Se estiver na Tabela (Lista)
-    if (document.getElementById("tabelaUsuariosBody")) {
+    if (document.getElementById("tbody-usuarios")) {
         carregarUsuarios();
     }
 
@@ -24,7 +24,21 @@ document.addEventListener("DOMContentLoaded", () => {
 // --- LISTAGEM ---
 async function carregarUsuarios() {
     const token = localStorage.getItem("token");
-    if (!token) return; 
+    const tbody = document.getElementById("tbody-usuarios");
+    
+    if (!tbody) {
+        console.error('Elemento tbody-usuarios não encontrado!');
+        return;
+    }
+
+    tbody.innerHTML = `
+        <tr>
+            <td colspan="5" class="text-center py-5">
+                <div class="spinner-border text-primary" role="status"></div>
+                <p class="text-muted mt-3">Carregando usuários...</p>
+            </td>
+        </tr>
+    `;
 
     try {
         const response = await fetch(`${API_URL}/usuarios`, {
@@ -34,21 +48,37 @@ async function carregarUsuarios() {
         if (response.ok) {
             const usuarios = await response.json();
             renderizarTabela(usuarios);
+        } else {
+            throw new Error('Erro ao carregar usuários');
         }
-    } catch (error) { console.error("Erro:", error); }
+    } catch (error) { 
+        console.error("Erro:", error);
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="5" class="text-center py-4">
+                    <div class="alert alert-danger d-inline-block" role="alert">
+                        <i class="bi bi-exclamation-triangle me-2"></i>
+                        Erro ao carregar usuários
+                    </div>
+                </td>
+            </tr>
+        `;
+    }
 }
 
 function renderizarTabela(usuarios) {
-    const tbody = document.getElementById("tabelaUsuariosBody");
+    const tbody = document.getElementById("tbody-usuarios");
+    
+    if (!tbody) return;
     tbody.innerHTML = ""; 
 
     usuarios.forEach(user => {
         let badgePerfil = "";
-        const perfil = user.perfil ? user.perfil.toUpperCase().replace("ROLE_", "") : "USER";
+        const perfil = user.perfil ? user.perfil.toUpperCase().replace("ROLE_", "") : "RH";
 
         if (perfil === "SUPERADMIN") badgePerfil = `<span class="badge bg-warning text-dark"><i class="bi bi-stars"></i> SUPERADMIN</span>`;
         else if (perfil === "TI") badgePerfil = `<span class="badge bg-danger"><i class="bi bi-pc-display"></i> TI</span>`;
-        else if (perfil === "RH") badgePerfil = `<span class="badge bg-info text-dark"><i class="bi bi-people-fill"></i> RH</span>`;
+        else if (perfil === "RH") badgePerfil = `<span class="badge bg-info"><i class="bi bi-people-fill"></i> RH</span>`;
         else badgePerfil = `<span class="badge bg-secondary">${perfil}</span>`;
 
         const badgeStatus = user.ativo 
@@ -62,7 +92,7 @@ function renderizarTabela(usuarios) {
             <td>${badgePerfil}</td>
             <td>${badgeStatus}</td>
             <td class="text-end">
-                <a href="usuario-form.html?id=${user.id}" class="btn btn-sm btn-warning text-dark" title="Editar"><i class="bi bi-pencil-square"></i></a>
+                <a href="usuarios-form.html?id=${user.id}" class="btn btn-sm btn-warning text-dark" title="Editar"><i class="bi bi-pencil-square"></i></a>
                 <button onclick="excluirUsuario(${user.id})" class="btn btn-sm btn-danger ms-1" title="Excluir"><i class="bi bi-trash-fill"></i></button>
             </td>
         `;

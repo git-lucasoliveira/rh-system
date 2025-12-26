@@ -12,35 +12,68 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function carregarCardPerfil(token) {
+    const cardPerfil = document.getElementById('card-perfil');
+    
+    if (!cardPerfil) {
+        console.error('Elemento card-perfil não encontrado!');
+        return;
+    }
+
     try {
         const payload = JSON.parse(atob(token.split('.')[1]));
         const nomeUser = payload.nome || payload.sub || "Usuário";
+        const loginUser = payload.sub || nomeUser;
         
-        let role = payload.perfil || payload.role || "USER";
+        let role = payload.perfil || payload.role || "RH";
         role = String(role).replace('ROLE_', '').toUpperCase();
 
-        if (nomeUser === 'lucas' || nomeUser === 'admin') role = 'SUPERADMIN';
-
-        // --- PREENCHE APENAS O CARD DA PÁGINA (A navbar é com o app.js) ---
+        let badgeClass = 'badge bg-info';
+        let badgeIcon = 'bi-people-fill';
         
-        // Nome grande no card
-        const elNome = document.getElementById('perfil-login');
-        if(elNome) elNome.innerText = nomeUser;
-        
-        // Input desabilitado
-        const elInput = document.getElementById('input-login');
-        if(elInput) elInput.value = nomeUser;
-        
-        // Badge do card
-        const badge = document.getElementById('perfil-role-badge');
-        if(badge) {
-            badge.innerText = role;
-            if (role === 'SUPERADMIN') {
-                badge.className = 'badge bg-warning text-dark border border-warning fw-bold';
-            }
+        if (role === 'SUPERADMIN') {
+            badgeClass = 'badge bg-warning text-dark';
+            badgeIcon = 'bi-stars';
+        } else if (role === 'TI') {
+            badgeClass = 'badge bg-danger';
+            badgeIcon = 'bi-pc-display';
         }
 
-    } catch (e) { console.error(e); }
+        cardPerfil.innerHTML = `
+            <div class="text-center mb-4">
+                <div class="card-icon" style="width: 100px; height: 100px; margin: 0 auto;">
+                    <i class="bi bi-person-circle" style="font-size: 3rem;"></i>
+                </div>
+            </div>
+            
+            <div class="mb-3">
+                <label class="form-label text-muted small">Nome de Usuário</label>
+                <h4 class="text-white fw-bold">${nomeUser}</h4>
+            </div>
+            
+            <div class="mb-3">
+                <label class="form-label text-muted small">Login</label>
+                <p class="text-white mb-0">${loginUser}</p>
+            </div>
+            
+            <div class="mb-3">
+                <label class="form-label text-muted small">Perfil de Acesso</label>
+                <div>
+                    <span class="${badgeClass}">
+                        <i class="${badgeIcon} me-1"></i>${role}
+                    </span>
+                </div>
+            </div>
+        `;
+
+    } catch (e) { 
+        console.error(e);
+        cardPerfil.innerHTML = `
+            <div class="alert alert-danger" role="alert">
+                <i class="bi bi-exclamation-triangle me-2"></i>
+                Erro ao carregar dados do perfil
+            </div>
+        `;
+    }
 }
 
 async function alterarSenha(e) {

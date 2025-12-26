@@ -1,6 +1,6 @@
-# 🌟 StarPeople - Backend
+# 💼 LORHS - Backend
 
-API REST para Sistema de Gestão de Pessoas desenvolvida com **Spring Boot 3** e **SQL Server**.
+**Lucas Oliveira RH System** - API REST para Sistema de Gestão de RH desenvolvida com **Spring Boot 3** e **SQL Server**.
 
 ---
 
@@ -23,7 +23,7 @@ API REST para Sistema de Gestão de Pessoas desenvolvida com **Spring Boot 3** e
 
 ```
 Backend/
-├── src/main/java/com/starcard/starpeople/
+├── src/main/java/com/lorhs/system/
 │   ├── config/
 │   │   ├── SecurityConfigurations.java  # Configuração de segurança
 │   │   └── SecurityFilter.java          # Filtro JWT personalizado
@@ -54,7 +54,7 @@ Backend/
 │   │   ├── LogService.java          # Serviço de auditoria
 │   │   ├── TokenService.java        # Geração/validação JWT
 │   │   └── AuthService.java         # Autenticação
-│   └── StarPeopleApplication.java   # Classe principal
+│   └── LorhsApplication.java        # Classe principal
 ├── src/main/resources/
 │   ├── application.properties        # Configuração geral
 │   ├── application-local.properties  # Credenciais locais (gitignored)
@@ -269,7 +269,7 @@ mvn spring-boot:run
 **Ou via IDE (IntelliJ IDEA):**
 1. Abrir o projeto Backend
 2. Aguardar o Maven baixar as dependências
-3. Executar `StarPeopleApplication.java`
+3. Executar `LorhsApplication.java`
 
 ### 4. Verificar
 

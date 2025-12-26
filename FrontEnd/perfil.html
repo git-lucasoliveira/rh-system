@@ -1,86 +1,83 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meu Perfil - StarPeople</title>
+    <title>Meu Perfil - LORHS</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/styles.css">
     <link rel="stylesheet" href="assets/css/components-extra.css">
     <link rel="stylesheet" href="assets/css/notifications.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎯</text></svg>">
 </head>
 <body>
-
     <div id="nav-placeholder"></div>
 
-    <div class="container mt-5 pb-5">
-        <div class="row justify-content-center">
-            <div class="col-lg-6 col-md-8">
+    <div class="container mt-4">
+        <div class="mb-4">
+            <h2 class="fw-bold text-white">
+                <i class="bi bi-person-circle me-2"></i>Meu Perfil
+            </h2>
+            <p class="text-muted mb-0">Informações da sua conta</p>
+        </div>
 
-                <div class="card card-dashboard p-4 border-0 shadow-lg">
-                    
-                    <div class="text-center mb-4">
-                        <div class="card-icon mb-3" style="width: 100px; height: 100px; margin: 0 auto; display: flex; align-items: center; justify-content: center; font-size: 3rem;">
-                            <i class="bi bi-person-circle"></i>
+        <div class="row g-4">
+            <div class="col-lg-6">
+                <div class="card-dashboard p-4">
+                    <h4 class="text-white mb-4">
+                        <i class="bi bi-info-circle me-2"></i>Dados do Usuário
+                    </h4>
+                    <div id="card-perfil">
+                        <div class="text-center py-4">
+                            <div class="spinner-border text-primary" role="status"></div>
+                            <p class="text-muted mt-2">Carregando dados...</p>
                         </div>
-                        
-                        <h3 class="text-white fw-bold mb-2" id="perfil-login">Carregando...</h3>
-                        <span class="badge" id="perfil-role-badge" style="font-size: 0.875rem; padding: 0.5rem 1rem;">...</span>
                     </div>
+                </div>
+            </div>
 
-                    <hr class="border-secondary opacity-25 my-4">
-
-                    <h5 class="text-white mb-4 fw-bold">
-                        <i class="bi bi-key-fill text-warning"></i> Alterar Senha
-                    </h5>
-
-                    <div id="msg-feedback" class="alert d-none text-center"></div>
-
+            <div class="col-lg-6">
+                <div class="card-dashboard p-4">
+                    <h4 class="text-white mb-4">
+                        <i class="bi bi-shield-lock me-2"></i>Alterar Senha
+                    </h4>
                     <form id="form-senha">
-                        
-                        <div class="mb-4">
-                            <label for="input-login" class="form-label text-white fw-semibold">Login (Usuário)</label>
-                            <input type="text" id="input-login" class="form-control" readonly>
+                        <div class="mb-3">
+                            <label for="senhaAtual" class="form-label">Senha Atual *</label>
+                            <input type="password" class="form-control" id="senhaAtual" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="novaSenha" class="form-label">Nova Senha *</label>
+                            <input type="password" class="form-control" id="novaSenha" required minlength="6">
+                            <small class="text-muted">Mínimo 6 caracteres</small>
                         </div>
 
                         <div class="mb-4">
-                            <label for="novaSenha" class="form-label text-white fw-semibold">Nova Senha</label>
-                            <input type="password" id="novaSenha" class="form-control" placeholder="Digite a nova senha" minlength="3" required>
-                            <small class="text-white-50 d-block mt-1">Mínimo 3 caracteres</small>
+                            <label for="confirmarSenha" class="form-label">Confirmar Nova Senha *</label>
+                            <input type="password" class="form-control" id="confirmarSenha" required>
                         </div>
 
-                        <div class="mb-4">
-                            <label for="confirmaSenha" class="form-label text-white fw-semibold">Confirmar Senha</label>
-                            <input type="password" id="confirmaSenha" class="form-control" placeholder="Digite novamente a senha" minlength="3" required>
-                        </div>
+                        <div id="msg-senha"></div>
 
-                        <div class="d-grid gap-2 mt-4">
-                            <button type="submit" id="btn-salvar" class="btn btn-star-primary py-3 fw-bold">
-                                <i class="bi bi-check2-circle"></i> Salvar Nova Senha
-                            </button>
-                            <a href="home.html" class="btn btn-star-outline py-2">
-                                <i class="bi bi-arrow-left"></i> Voltar ao Dashboard
-                            </a>
-                        </div>
-
+                        <button type="submit" class="btn btn-star-primary w-100">
+                            <i class="bi bi-check-lg me-2"></i>Alterar Senha
+                        </button>
                     </form>
                 </div>
-
             </div>
         </div>
 
         <footer class="text-center mt-5 py-4 text-muted border-top border-secondary border-opacity-10">
-            <small>&copy; 2025 Grupo Starbank</small>
+            <small class="text-white opacity-50">&copy; 2025 <strong>Lucas Oliveira</strong> | LORHS v2.0</small>
         </footer>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    
     <script src="assets/js/notifications.js"></script>
     <script src="assets/js/app.js"></script>
     <script src="assets/js/perfil.js"></script>
-    
 </body>
 </html>

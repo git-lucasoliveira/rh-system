@@ -1,8 +1,8 @@
-<nav class="navbar navbar-expand-lg navbar-star mb-5">
-    <div class="container">
-
+<nav class="navbar navbar-expand-lg navbar-dark navbar-star">
+    <div class="container-fluid">
         <a class="navbar-brand" href="home.html">
-            <i class="bi bi-stars"></i> StarPeople <span class="badge bg-warning text-dark ms-2" style="font-size: 0.5em;">BETA</span>
+            <i class="bi bi-bullseye me-2"></i>
+            <span>LORHS</span>
         </a>
 
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -10,46 +10,81 @@
         </button>
 
         <div class="collapse navbar-collapse ms-4" id="navbarNav">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-
-                <li class="nav-item dropdown" id="nav-menu-admin">
-                    <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Administração
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="home.html">
+                        <i class="bi bi-speedometer2 me-1"></i>Dashboard
                     </a>
-                    <ul class="dropdown-menu dropdown-menu-dark">
-                        
-                        <li id="nav-item-usuarios">
-                            <a class="dropdown-item" href="usuarios.html"><i class="bi bi-people"></i> Usuários de Sistema</a>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+                        <i class="bi bi-people me-1"></i>Colaboradores
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end">
+                        <li>
+                            <a class="dropdown-item" href="funcionarios.html">
+                                <i class="bi bi-list-ul"></i>Listar Todos
+                            </a>
                         </li>
-
-                        <li id="nav-item-logs">
-                            <a class="dropdown-item" href="logs.html"><i class="bi bi-shield-check"></i> Auditoria / Logs</a>
+                        <li>
+                            <a class="dropdown-item" href="funcionario-form.html">
+                                <i class="bi bi-person-plus"></i>Novo Cadastro
+                            </a>
                         </li>
+                    </ul>
+                </li>
 
-                        <li id="nav-divider"><hr class="dropdown-divider"></li>
+                <li class="nav-item">
+                    <a class="nav-link" href="setores.html">
+                        <i class="bi bi-diagram-3 me-1"></i>Setores
+                    </a>
+                </li>
 
-                        <li><a class="dropdown-item" href="setores.html"><i class="bi bi-building"></i> Setores</a></li>
-                        <li><a class="dropdown-item" href="cargos.html"><i class="bi bi-briefcase"></i> Cargos</a></li>
-                        
-                        <li><a class="dropdown-item" href="funcionarios.html"><i class="bi bi-person-badge"></i> Colaboradores</a></li>
+                <li class="nav-item">
+                    <a class="nav-link" href="cargos.html">
+                        <i class="bi bi-briefcase me-1"></i>Cargos
+                    </a>
+                </li>
+
+                <li class="nav-item dropdown" id="menu-administracao" style="display: none;">
+                    <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+                        <i class="bi bi-gear-fill me-1"></i>Administração
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end">
+                        <li>
+                            <a class="dropdown-item" href="usuarios.html">
+                                <i class="bi bi-person-gear"></i>Usuários
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="logs.html">
+                                <i class="bi bi-clock-history"></i>Logs de Auditoria
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+                        <i class="bi bi-person-circle me-1"></i>
+                        <span id="nome-usuario-nav">Usuário</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end">
+                        <li>
+                            <a class="dropdown-item" href="perfil.html">
+                                <i class="bi bi-person-gear"></i>Meu Perfil
+                            </a>
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <a class="dropdown-item text-danger" href="#" id="btn-logout">
+                                <i class="bi bi-box-arrow-right"></i>Sair do Sistema
+                            </a>
+                        </li>
                     </ul>
                 </li>
             </ul>
-
-            <div class="d-flex align-items-center gap-3">
-                <div class="text-white small text-end">
-                    <div>
-                        Olá, <a href="perfil.html" class="text-white text-decoration-none fw-bold hover-effect">
-                            <span id="usuarioLogadoNome">Carregando...</span>
-                        </a>
-                    </div>
-                    <span id="usuarioLogadoPerfil" class="badge ms-1" style="display: none;">...</span>
-                </div>
-                
-                <button id="btnSair" class="btn btn-sm btn-outline-danger">
-                    <i class="bi bi-box-arrow-right"></i> Sair
-                </button>
-            </div>
         </div>
     </div>
 </nav>

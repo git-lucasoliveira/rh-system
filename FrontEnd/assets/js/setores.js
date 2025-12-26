@@ -6,11 +6,19 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 async function carregarSetores() {
-    const container = document.getElementById('conteudo-principal');
-    const statusMsg = document.getElementById('status-msg');
+    const container = document.getElementById('lista-setores');
     
-    if(statusMsg) statusMsg.classList.remove('d-none');
-    if(container) container.innerHTML = "";
+    if (!container) {
+        console.error('Elemento lista-setores não encontrado!');
+        return;
+    }
+
+    container.innerHTML = `
+        <div class="col-12 text-center py-5">
+            <div class="spinner-border text-primary" role="status"></div>
+            <p class="text-muted mt-3">Carregando setores...</p>
+        </div>
+    `;
 
     try {
         const token = localStorage.getItem('token');
@@ -21,22 +29,41 @@ async function carregarSetores() {
         if(!res.ok) throw new Error("Erro ao buscar setores");
         
         const lista = await res.json();
-
-        if(statusMsg) statusMsg.classList.add('d-none');
         renderizarSetores(lista);
 
     } catch (error) {
         console.error(error);
-        if(statusMsg) statusMsg.innerHTML = `<p class="text-danger">Erro ao carregar: ${error.message}</p>`;
+        container.innerHTML = `
+            <div class="col-12">
+                <div class="alert alert-danger" role="alert">
+                    <i class="bi bi-exclamation-triangle me-2"></i>
+                    Erro ao carregar setores. Tente novamente.
+                </div>
+            </div>
+        `;
     }
 }
 
 function renderizarSetores(lista) {
-    const container = document.getElementById('conteudo-principal');
+    const container = document.getElementById('lista-setores');
+    
+    if (!container) return;
+    
     container.innerHTML = "";
 
     if(lista.length === 0) {
-        container.innerHTML = '<div class="col-12 text-center text-white opacity-50">Nenhum setor cadastrado.</div>';
+        container.innerHTML = `
+            <div class="col-12">
+                <div class="card-dashboard p-5 text-center">
+                    <i class="bi bi-inbox display-1 text-muted mb-3"></i>
+                    <h4 class="text-white mb-2">Nenhum setor cadastrado</h4>
+                    <p class="text-muted mb-4">Cadastre o primeiro setor para começar.</p>
+                    <a href="setor-form.html" class="btn btn-star-primary">
+                        <i class="bi bi-plus-lg me-2"></i>Cadastrar Setor
+                    </a>
+                </div>
+            </div>
+        `;
         return;
     }
 

@@ -10,9 +10,21 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 async function carregarLogs(token) {
-    const container = document.getElementById('lista-logs');
-    const loading = document.getElementById('loading');
-    const tabela = document.getElementById('tabela-container');
+    const container = document.getElementById('tbody-logs');
+    
+    if (!container) {
+        console.error('Elemento tbody-logs não encontrado!');
+        return;
+    }
+
+    container.innerHTML = `
+        <tr>
+            <td colspan="5" class="text-center py-5">
+                <div class="spinner-border text-primary" role="status"></div>
+                <p class="text-muted mt-3">Carregando logs...</p>
+            </td>
+        </tr>
+    `;
 
     try {
         const res = await fetch(`${API_URL}/logs`, { 
@@ -27,11 +39,8 @@ async function carregarLogs(token) {
 
         const logs = await res.json();
 
-        if(loading) loading.classList.add('d-none');
-        if(tabela) tabela.classList.remove('d-none');
-
         if(logs.length === 0) {
-            container.innerHTML = '<tr><td colspan="3" class="text-center text-muted p-4">Nenhum registro de auditoria encontrado.</td></tr>';
+            container.innerHTML = '<tr><td colspan="5" class="text-center text-muted p-4">Nenhum registro de auditoria encontrado.</td></tr>';
             return;
         }
 
@@ -53,12 +62,23 @@ async function carregarLogs(token) {
                     </span>
                 </td>
                 <td class="text-white">${log.acao || '-'}</td>
+                <td class="text-muted">${log.entidade || '-'}</td>
+                <td class="text-muted">${log.detalhes || '-'}</td>
             `;
             container.appendChild(tr);
         });
 
     } catch (e) {
         console.error("Falha ao buscar logs:", e);
-        if(loading) loading.innerHTML = `<p class="text-danger">Erro ao carregar dados: ${e.message}</p>`;
+        container.innerHTML = `
+            <tr>
+                <td colspan="5" class="text-center py-4">
+                    <div class="alert alert-danger d-inline-block" role="alert">
+                        <i class="bi bi-exclamation-triangle me-2"></i>
+                        Erro ao carregar dados: ${e.message}
+                    </div>
+                </td>
+            </tr>
+        `;
     }
 }

@@ -2,291 +2,233 @@
  * Lista de Colaboradores
  */
 
-const API_URL = "http://localhost:8080/api"; 
-let listaOriginal = [];
+const API_URL = "http://localhost:8080/api";
 
-document.addEventListener('DOMContentLoaded', () => {
-    // 1. Inicia carregamentos (O app.js já validou o acesso básico)
-    carregarSetoresNoFiltro();
-    carregarDados();
+let funcionarios = [];
+let setores = [];
+
+document.addEventListener('DOMContentLoaded', async () => {
+    await carregarSetores();
+    await carregarDados();
+    
+    // Event listeners para filtros
+    document.getElementById('filtro-nome')?.addEventListener('input', aplicarFiltros);
+    document.getElementById('filtro-setor')?.addEventListener('change', aplicarFiltros);
+    document.getElementById('filtro-status')?.addEventListener('change', aplicarFiltros);
 });
 
-// --- CARREGAR DADOS ---
-async function carregarDados() {
-    const container = document.getElementById('conteudo-principal');
-    const statusMsg = document.getElementById('status-msg');
+async function carregarSetores() {
     const token = localStorage.getItem('token');
-    
-    // Pequena verificação local de permissão para botões
-    const userRole = obterRoleLocal(token);
-
-    if(statusMsg) statusMsg.classList.remove('d-none');
-    if(container) container.innerHTML = ""; 
-
     try {
-        const res = await fetch(`${API_URL}/funcionarios`, { 
-            headers: { 'Authorization': `Bearer ${token}` } 
+        const response = await fetch(`${API_URL}/setores`, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
         });
 
-        if (!res.ok) throw new Error('Erro ao buscar dados');
-
-        listaOriginal = await res.json();
-        
-        if(statusMsg) statusMsg.classList.add('d-none');
-        
-        mostrarNaTela(listaOriginal, userRole);
-
-    } catch (erro) {
-        console.error(erro);
-        if(statusMsg) statusMsg.innerHTML = `<p class="text-danger text-center mt-3">Erro: ${erro.message}</p>`;
+        if (response.ok) {
+            setores = await response.json();
+            preencherFiltroSetores();
+        }
+    } catch (error) {
+        console.error('Erro ao carregar setores:', error);
     }
 }
 
-// --- CARREGAR SETORES (FILTRO) ---
-async function carregarSetoresNoFiltro() {
+async function carregarDados() {
     const token = localStorage.getItem('token');
-    try {
-        const res = await fetch(`${API_URL}/setores`, { headers: { 'Authorization': `Bearer ${token}` } });
-        if(res.ok) {
-            const setores = await res.json();
-            const select = document.getElementById('filtro-setor');
-            if(select) {
-                select.innerHTML = '<option value="">Todos os Setores</option>';
-                setores.forEach(setor => {
-                    const option = document.createElement('option');
-                    option.value = setor.nome; 
-                    option.textContent = setor.nome;
-                    select.appendChild(option);
-                });
-            }
-        }
-    } catch (e) { console.error("Erro setores", e); }
-}
-
-// --- FILTRAGEM ---
-function aplicarFiltros() {
-    const texto = document.getElementById('filtro-texto').value.toLowerCase();
-    const setorNome = document.getElementById('filtro-setor').value;
-    const status = document.getElementById('filtro-status').value;
-
-    const token = localStorage.getItem('token');
-    const userRole = obterRoleLocal(token);
-
-    const listaFiltrada = listaOriginal.filter(p => {
-        const matchTexto = (p.nome && p.nome.toLowerCase().includes(texto)) || 
-                           (p.email && p.email.toLowerCase().includes(texto)) ||
-                           (p.cpf && p.cpf.includes(texto));
-
-        let matchSetor = true;
-        if (setorNome !== "") {
-            matchSetor = p.setor && p.setor.nome === setorNome;
-        }
-
-        let matchStatus = true;
-        if (status !== "") {
-            matchStatus = String(p.ativo) === status;
-        }
-
-        return matchTexto && matchSetor && matchStatus;
-    });
-
-    mostrarNaTela(listaFiltrada, userRole);
-}
-
-function limparFiltros() {
-    document.getElementById('filtro-texto').value = "";
-    document.getElementById('filtro-setor').value = "";
-    document.getElementById('filtro-status').value = "";
-    aplicarFiltros();
-}
-
-// Debounce para filtro de texto
-let filterTimeout;
-function debounceFilter() {
-    clearTimeout(filterTimeout);
-    filterTimeout = setTimeout(aplicarFiltros, 300);
-}
-
-// --- RENDERIZAR CARDS (Design Moderno Showcase - OTIMIZADO) ---
-function mostrarNaTela(lista, userRole) {
-    const container = document.getElementById('conteudo-principal');
-    container.innerHTML = "";
-
-    if(lista.length === 0){
-        container.innerHTML = '<div class="col-12 text-center text-white opacity-50 mt-5"><h5>Nenhum registro encontrado.</h5></div>';
+    const listaContainer = document.getElementById('lista-funcionarios');
+    
+    if (!listaContainer) {
+        console.error('Elemento lista-funcionarios não encontrado!');
         return;
     }
 
-    // Usar DocumentFragment para melhor performance
-    const fragment = document.createDocumentFragment();
+    listaContainer.innerHTML = `
+        <div class="text-center py-5">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Carregando...</span>
+            </div>
+            <p class="text-muted mt-3">Carregando colaboradores...</p>
+        </div>
+    `;
 
-    lista.forEach(p => {
-        const nomeCargo = (p.cargo && typeof p.cargo === 'object') ? p.cargo.nome : (p.cargo || "-");
-        const nomeSetor = (p.setor && typeof p.setor === 'object') ? p.setor.nome : (p.setor || "-");
-        const isAtivo = p.ativo === true;
+    try {
+        const response = await fetch(`${API_URL}/funcionarios`, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
 
-        // Badge moderno com ícone
-        const badgeStatus = isAtivo
-            ? '<span class="status-badge ativo"><i class="bi bi-check-circle-fill"></i> ATIVO</span>' 
-            : '<span class="status-badge inativo"><i class="bi bi-x-circle-fill"></i> INATIVO</span>';
-
-        // Botões de ação modernos
-        const btnEditar = `<a href="funcionario-form.html?id=${p.id}" class="btn-action edit" title="Editar"><i class="bi bi-pencil-fill"></i></a>`;
-        
-        const btnStatus = `
-            <button onclick="alterarStatus(${p.id}, ${isAtivo})" class="btn-action toggle" title="${isAtivo ? 'Inativar' : 'Ativar'}">
-                <i class="bi bi-arrow-repeat"></i>
-            </button>`;
-
-        // Botão Excluir: Só SUPERADMIN vê
-        let btnExcluir = '';
-        if (userRole === 'SUPERADMIN') {
-            btnExcluir = `
-                <button onclick="excluirFuncionario(${p.id})" class="btn-action delete" title="Excluir">
-                    <i class="bi bi-trash-fill"></i>
-                </button>`;
+        if (response.ok) {
+            funcionarios = await response.json();
+            mostrarNaTela(funcionarios);
+        } else if (response.status === 401 || response.status === 403) {
+            showError('Sessão expirada. Faça login novamente');
+            localStorage.clear();
+            window.location.href = 'index.html';
+        } else {
+            throw new Error('Erro ao carregar dados');
         }
-
-        const coluna = document.createElement('div');
-        coluna.className = 'col-md-6 col-lg-4'; 
-        
-        coluna.innerHTML = `
-            <div class="card-dashboard colaborador-card">
-                <div class="text-center mb-3">
-                    <div class="avatar-circle mx-auto">
-                        <i class="bi bi-person-fill"></i>
-                    </div>
-                </div>
-                
-                <h5 class="text-white text-center mb-2">${p.nome || 'Sem Nome'}</h5>
-                <p class="text-muted text-center small mb-3">
-                    <i class="bi bi-envelope me-1"></i>
-                    ${p.email || 'sem@email.com'}
-                </p>
-                
-                <div class="d-flex justify-content-between align-items-center mb-3 pb-3 border-bottom border-secondary border-opacity-25">
-                    <div>
-                        <small class="text-muted d-block mb-1">Cargo</small>
-                        <strong class="text-white small">${nomeCargo}</strong>
-                    </div>
-                    <div class="text-end">
-                        <small class="text-muted d-block mb-1">Setor</small>
-                        <strong class="text-white small">${nomeSetor}</strong>
-                    </div>
-                </div>
-                
-                <div class="d-flex justify-content-between align-items-center">
-                    ${badgeStatus}
-                    
-                    <div class="d-flex gap-2">
-                        ${btnEditar}
-                        ${btnStatus}
-                        ${btnExcluir}
-                    </div>
-                </div>
-            </div>`;
-        fragment.appendChild(coluna);
-    });
-    
-    // Append tudo de uma vez (mais rápido)
-    container.appendChild(fragment);
+    } catch (error) {
+        console.error('Erro:', error);
+        listaContainer.innerHTML = `
+            <div class="alert alert-danger" role="alert">
+                <i class="bi bi-exclamation-triangle me-2"></i>
+                Erro ao carregar colaboradores. Tente novamente.
+            </div>
+        `;
+    }
 }
 
-// --- AÇÕES ---
-async function alterarStatus(id, statusAtual) {
-    const acao = statusAtual ? 'inativar' : 'ativar';
-    showConfirmModal(
-        `Deseja ${acao} este colaborador?`,
-        async () => {
-            const token = localStorage.getItem('token');
-            
-            try {
-                const resGet = await fetch(`${API_URL}/funcionarios/${id}`, {headers:{'Authorization':`Bearer ${token}`}});
-                const funcionario = await resGet.json();
-                
-                console.log('Funcionário recebido do backend:', funcionario);
-                
-                // Extrair IDs corretamente (pode vir como funcionario.setor.id ou funcionario.setorId)
-                const setorId = funcionario.setor?.id || funcionario.setorId;
-                const cargoId = funcionario.cargo?.id || funcionario.cargoId;
-                
-                // Se os IDs ainda forem strings (nomes), precisamos buscar do listaOriginal
-                const func = listaOriginal.find(f => f.id === id);
-                const setorIdFinal = (typeof setorId === 'number') ? setorId : func?.setor?.id;
-                const cargoIdFinal = (typeof cargoId === 'number') ? cargoId : func?.cargo?.id;
-                
-                // Formatar objeto corretamente para enviar ao backend
-                const funcionarioAtualizado = {
-                    nome: funcionario.nome,
-                    cpf: funcionario.cpf,
-                    email: funcionario.email,
-                    dataAdmissao: funcionario.dataAdmissao,
-                    ativo: !statusAtual,
-                    setor: { id: setorIdFinal },
-                    cargo: { id: cargoIdFinal }
-                };
+function preencherFiltroSetores() {
+    const selectSetor = document.getElementById('filtro-setor');
+    if (!selectSetor) return;
 
-                console.log('Enviando para backend:', funcionarioAtualizado);
+    selectSetor.innerHTML = '<option value="">Todos os Setores</option>';
+    
+    setores.forEach(setor => {
+        const option = document.createElement('option');
+        option.value = setor.id;
+        option.textContent = setor.nome;
+        selectSetor.appendChild(option);
+    });
+}
 
-                const resPut = await fetch(`${API_URL}/funcionarios/${id}`, {
-                    method: 'PUT',
-                    headers: {'Authorization':`Bearer ${token}`,'Content-Type':'application/json'},
-                    body: JSON.stringify(funcionarioAtualizado)
-                });
+function aplicarFiltros() {
+    const filtroNome = document.getElementById('filtro-nome')?.value.toLowerCase() || '';
+    const filtroSetor = document.getElementById('filtro-setor')?.value || '';
+    const filtroStatus = document.getElementById('filtro-status')?.value || '';
 
-                if(resPut.ok) {
-                    showSuccess(`Colaborador ${acao === 'ativar' ? 'ativado' : 'inativado'} com sucesso!`);
-                    carregarDados();
-                } else {
-                    const erro = await resPut.text();
-                    console.error('Erro do backend:', erro);
-                    showError(`Erro ao atualizar: ${erro}`);
-                }
+    const funcionariosFiltrados = funcionarios.filter(func => {
+        const matchNome = func.nome.toLowerCase().includes(filtroNome);
+        const matchSetor = !filtroSetor || func.setor.id == filtroSetor;
+        const matchStatus = !filtroStatus || func.status === filtroStatus;
 
-            } catch(e) {
-                console.error('Erro completo:', e);
-                showError("Erro de conexão");
-            }
-        },
-        `${statusAtual ? 'Inativar' : 'Ativar'} Colaborador`
-    );
+        return matchNome && matchSetor && matchStatus;
+    });
+
+    mostrarNaTela(funcionariosFiltrados);
+}
+
+function mostrarNaTela(lista) {
+    const listaContainer = document.getElementById('lista-funcionarios');
+    
+    if (!listaContainer) {
+        console.error('Elemento lista-funcionarios não encontrado!');
+        return;
+    }
+
+    if (lista.length === 0) {
+        listaContainer.innerHTML = `
+            <div class="card-dashboard p-5 text-center">
+                <i class="bi bi-inbox display-1 text-muted mb-3"></i>
+                <h4 class="text-white mb-2">Nenhum colaborador encontrado</h4>
+                <p class="text-muted mb-4">Não há colaboradores cadastrados ou nenhum resultado corresponde aos filtros aplicados.</p>
+                <a href="funcionario-form.html" class="btn btn-star-primary">
+                    <i class="bi bi-person-plus me-2"></i>Cadastrar Primeiro Colaborador
+                </a>
+            </div>
+        `;
+        return;
+    }
+
+    let html = '<div class="row g-4">';
+
+    lista.forEach(func => {
+        const statusBadge = func.ativo === true || func.status === 'ATIVO'
+            ? '<span class="badge bg-success">ATIVO</span>' 
+            : '<span class="badge bg-danger">INATIVO</span>';
+
+        html += `
+            <div class="col-md-6 col-lg-4">
+                <div class="card-dashboard h-100 p-4">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <div class="card-icon" style="width: 60px; height: 60px; margin: 0;">
+                            <i class="bi bi-person-fill" style="font-size: 1.5rem;"></i>
+                        </div>
+                        ${statusBadge}
+                    </div>
+
+                    <h5 class="text-white fw-bold mb-2">${func.nome}</h5>
+                    
+                    <div class="mb-3">
+                        <small class="text-muted d-block mb-1">
+                            <i class="bi bi-briefcase me-1"></i>${func.cargo?.nome || 'Sem cargo'}
+                        </small>
+                        <small class="text-muted d-block mb-1">
+                            <i class="bi bi-building me-1"></i>${func.setor?.nome || 'Sem setor'}
+                        </small>
+                        <small class="text-muted d-block mb-1">
+                            <i class="bi bi-envelope me-1"></i>${func.email}
+                        </small>
+                        <small class="text-muted d-block">
+                            <i class="bi bi-phone me-1"></i>${func.telefone || 'Não informado'}
+                        </small>
+                    </div>
+
+                    <div class="mt-3 pt-3 border-top border-secondary border-opacity-25">
+                        <small class="text-muted d-block">
+                            <i class="bi bi-calendar3 me-1"></i>Admissão: ${formatarData(func.dataAdmissao)}
+                        </small>
+                    </div>
+
+                    <div class="d-flex gap-2 mt-4">
+                        <a href="funcionario-form.html?id=${func.id}" class="btn btn-sm btn-star-outline flex-fill">
+                            <i class="bi bi-pencil"></i>
+                        </a>
+                        <button onclick="confirmarExclusao(${func.id}, '${func.nome}')" 
+                                class="btn btn-sm btn-outline-danger flex-fill">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+    });
+
+    html += '</div>';
+    listaContainer.innerHTML = html;
+}
+
+function formatarData(dataString) {
+    if (!dataString) return 'N/A';
+    const data = new Date(dataString + 'T00:00:00');
+    return data.toLocaleDateString('pt-BR');
+}
+
+async function confirmarExclusao(id, nome) {
+    if (confirm(`Deseja realmente excluir o colaborador "${nome}"?`)) {
+        await excluirFuncionario(id);
+    }
 }
 
 async function excluirFuncionario(id) {
-    showConfirmModal(
-        'Deseja realmente excluir este colaborador permanentemente? Esta ação não pode ser desfeita.',
-        async () => {
-            const token = localStorage.getItem('token');
-            try {
-                const res = await fetch(`${API_URL}/funcionarios/${id}`, {
-                    method: 'DELETE', 
-                    headers:{'Authorization':`Bearer ${token}`}
-                });
-                if(res.ok) {
-                    showSuccess('Colaborador excluído com sucesso!');
-                    carregarDados();
-                } else {
-                    showError("Erro ao excluir. Verifique permissões.");
-                }
-            } catch(e) {
-                console.error(e);
-                showError("Erro de conexão");
-            }
-        },
-        'Excluir Colaborador'
-    );
-}
+    const token = localStorage.getItem('token');
 
-// Helper local apenas para decidir botões
-function obterRoleLocal(token) {
     try {
-        const payload = JSON.parse(atob(token.split('.')[1]));
-        const nomeUser = payload.nome || payload.sub || "";
-        
-        let role = payload.perfil || payload.role || "USER";
-        role = String(role).replace('ROLE_', '').toUpperCase();
+        const response = await fetch(`${API_URL}/funcionarios/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
 
-        if (nomeUser === 'lucas' || nomeUser === 'admin') role = 'SUPERADMIN';
-        return role;
-    } catch (e) { return "USER"; }
+        if (response.ok) {
+            showSuccess('Colaborador excluído com sucesso!');
+            await carregarDados();
+        } else if (response.status === 401 || response.status === 403) {
+            showError('Sessão expirada. Faça login novamente');
+            localStorage.clear();
+            window.location.href = 'index.html';
+        } else {
+            throw new Error('Erro ao excluir');
+        }
+    } catch (error) {
+        console.error('Erro:', error);
+        showError('Erro ao excluir colaborador');
+    }
 }

@@ -1,53 +1,65 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Usuários - StarPeople</title>
+    <title>Usuários - LORHS</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/styles.css">
     <link rel="stylesheet" href="assets/css/components-extra.css">
     <link rel="stylesheet" href="assets/css/notifications.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎯</text></svg>">
 </head>
 <body>
-
     <div id="nav-placeholder"></div>
 
-    <div class="container">
-        
+    <div class="container mt-4">
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <h2 class="fw-bold">Usuários de Sistema</h2>
-            <a href="usuarios-form.html" class="btn btn-star-primary px-4 py-2">
-                <i class="bi bi-person-plus-fill"></i> Novo Usuário
+            <div>
+                <h2 class="fw-bold text-white">
+                    <i class="bi bi-person-gear me-2"></i>Usuários do Sistema
+                </h2>
+                <p class="text-muted mb-0">Gerenciamento de contas de acesso</p>
+            </div>
+            <a href="usuarios-form.html" class="btn btn-star-primary">
+                <i class="bi bi-person-plus me-2"></i>Novo Usuário
             </a>
         </div>
 
-        <div class="card card-dashboard p-4">
+        <div class="card-dashboard p-4">
             <div class="table-responsive">
-                <table class="table table-dark table-hover align-middle">
+                <table class="table table-hover" id="tabela-usuarios">
                     <thead>
                         <tr>
                             <th>ID</th>
-                            <th>Login / Acesso</th>
+                            <th>Nome</th>
+                            <th>Login</th>
                             <th>Perfil</th>
-                            <th>Status</th>
-                            <th class="text-end">Ações</th>
+                            <th>Ações</th>
                         </tr>
                     </thead>
-                    <tbody id="tabelaUsuariosBody">
-                        </tbody>
+                    <tbody id="tbody-usuarios">
+                        <tr>
+                            <td colspan="5" class="text-center text-muted">
+                                <div class="spinner-border spinner-border-sm me-2" role="status"></div>
+                                Carregando usuários...
+                            </td>
+                        </tr>
+                    </tbody>
                 </table>
             </div>
         </div>
+
+        <footer class="text-center mt-5 py-4 text-muted border-top border-secondary border-opacity-10">
+            <small class="text-white opacity-50">&copy; 2025 <strong>Lucas Oliveira</strong> | LORHS v2.0</small>
+        </footer>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    
     <script src="assets/js/notifications.js"></script>
     <script src="assets/js/app.js"></script>
-    
     <script src="assets/js/usuarios.js"></script>
 </body>
 </html>

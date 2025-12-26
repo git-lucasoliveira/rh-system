@@ -147,12 +147,17 @@ function validarCampoObrigatorio(valor) {
 
 // ========== LOADING STATE ==========
 function setButtonLoading(button, loading = true) {
+    if (!button) {
+        console.warn('Botão não encontrado para setButtonLoading');
+        return;
+    }
+    
     if (loading) {
         button.dataset.originalText = button.innerHTML;
         button.disabled = true;
         button.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Processando...';
     } else {
         button.disabled = false;
-        button.innerHTML = button.dataset.originalText;
+        button.innerHTML = button.dataset.originalText || 'Salvar';
     }
 }

@@ -1,49 +1,43 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StarPeople - Cargos</title>
+    <title>Cargos - LORHS</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/styles.css">
     <link rel="stylesheet" href="assets/css/components-extra.css">
     <link rel="stylesheet" href="assets/css/notifications.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎯</text></svg>">
 </head>
 <body>
-
     <div id="nav-placeholder"></div>
-    
-    <div class="container pb-5">
-        <div class="d-flex justify-content-between align-items-end mb-4 border-bottom border-secondary border-opacity-25 pb-3">
+
+    <div class="container mt-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
             <div>
-                <h2 class="text-white fw-bold mb-0">Cargos</h2>
-                <p class="text-white opacity-50 mb-0">Funções e posições</p>
+                <h2 class="fw-bold text-white">
+                    <i class="bi bi-briefcase-fill me-2"></i>Cargos
+                </h2>
+                <p class="text-muted mb-0">Gestão de cargos e funções</p>
             </div>
-            <div class="d-flex gap-2">
-                <button onclick="carregarCargos()" class="btn btn-outline-light" title="Atualizar">
-                    <i class="bi bi-arrow-clockwise"></i>
-                </button>
-                <a href="cargo-form.html" class="btn btn-star-primary">
-                    <i class="bi bi-plus-lg"></i> Novo
-                </a>
-            </div>
+            <a href="cargo-form.html" class="btn btn-star-primary">
+                <i class="bi bi-plus-lg me-2"></i>Novo Cargo
+            </a>
         </div>
 
-        <div id="status-msg" class="text-center my-5 d-none">
-            <div class="spinner-border text-primary" role="status"></div>
-            <p class="text-muted mt-2">Carregando cargos...</p>
-        </div>
+        <div id="lista-cargos" class="row g-4"></div>
 
-        <div id="conteudo-principal" class="row g-4"></div>
+        <footer class="text-center mt-5 py-4 text-muted border-top border-secondary border-opacity-10">
+            <small class="text-white opacity-50">&copy; 2025 <strong>Lucas Oliveira</strong> | LORHS v2.0</small>
+        </footer>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    
     <script src="assets/js/notifications.js"></script>
     <script src="assets/js/app.js"></script>
     <script src="assets/js/cargos.js"></script>
-    
 </body>
 </html>

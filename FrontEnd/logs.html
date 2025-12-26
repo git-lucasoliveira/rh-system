@@ -1,52 +1,60 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Auditoria - StarPeople</title>
+    <title>Auditoria - LORHS</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/styles.css">
     <link rel="stylesheet" href="assets/css/components-extra.css">
+    <link rel="stylesheet" href="assets/css/notifications.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎯</text></svg>">
 </head>
 <body>
-    
     <div id="nav-placeholder"></div>
 
-    <div class="container pb-5">
+    <div class="container mt-4">
+        <div class="mb-4">
+            <h2 class="fw-bold text-white">
+                <i class="bi bi-clock-history me-2"></i>Logs de Auditoria
+            </h2>
+            <p class="text-muted mb-0">Histórico de ações do sistema</p>
+        </div>
 
-        <h2 class="text-white fw-bold mb-4 d-flex align-items-center gap-2">
-            <i class="bi bi-shield-check text-success"></i> Logs de Auditoria
-        </h2>
-
-        <div class="card card-dashboard p-4 border-0">
-            
-            <div id="loading" class="text-center py-5">
-                <div class="spinner-border text-primary" role="status"></div>
-                <p class="text-muted mt-2">Carregando histórico...</p>
-            </div>
-
-            <div class="table-responsive d-none" id="tabela-container">
-                <table class="table table-hover align-middle" style="border-color: rgba(255,255,255,0.1);">
+        <div class="card-dashboard p-4">
+            <div class="table-responsive">
+                <table class="table table-hover" id="tabela-logs">
                     <thead>
                         <tr>
-                            <th class="text-white opacity-75 small">DATA/HORA</th>
-                            <th class="text-white opacity-75 small">USUÁRIO (QUEM)</th>
-                            <th class="text-white opacity-75 small">AÇÃO (O QUÊ)</th>
+                            <th>Data/Hora</th>
+                            <th>Usuário</th>
+                            <th>Ação</th>
+                            <th>Entidade</th>
+                            <th>Detalhes</th>
                         </tr>
                     </thead>
-                    <tbody id="lista-logs">
-                        </tbody>
+                    <tbody id="tbody-logs">
+                        <tr>
+                            <td colspan="5" class="text-center text-muted">
+                                <div class="spinner-border spinner-border-sm me-2" role="status"></div>
+                                Carregando logs...
+                            </td>
+                        </tr>
+                    </tbody>
                 </table>
             </div>
         </div>
+
+        <footer class="text-center mt-5 py-4 text-muted border-top border-secondary border-opacity-10">
+            <small class="text-white opacity-50">&copy; 2025 <strong>Lucas Oliveira</strong> | LORHS v2.0</small>
+        </footer>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    
+    <script src="assets/js/notifications.js"></script>
     <script src="assets/js/app.js"></script>
     <script src="assets/js/logs.js"></script>
-
 </body>
 </html>

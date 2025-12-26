@@ -89,28 +89,31 @@ function atualizarNavbar(nome, role) {
 }
 
 function controlarPermissoesMenu(role) {
-    if (role !== 'SUPERADMIN') {
-        // Remove itens do menu se não for chefe
-        const idsParaEsconder = ["nav-item-usuarios", "nav-item-logs", "nav-divider"];
-        idsParaEsconder.forEach(id => {
-            const el = document.getElementById(id);
-            if (el) el.remove();
-        });
+    // Mostra menu de Administração apenas para SUPERADMIN
+    const menuAdmin = document.getElementById('menu-administracao');
+    if (menuAdmin) {
+        if (role === 'SUPERADMIN') {
+            menuAdmin.style.display = 'block';
+        } else {
+            menuAdmin.style.display = 'none';
+        }
     }
 }
 
 function configurarLogout() {
-    const btnSair = document.getElementById("btnSair");
+    const btnSair = document.getElementById("btn-logout");
     if (btnSair) {
         btnSair.addEventListener("click", (e) => {
             e.preventDefault();
-            logoutSistema();
+            if (confirm('Deseja realmente sair do sistema?')) {
+                logoutSistema();
+            }
         });
     }
 }
 
 function logoutSistema() {
-    localStorage.removeItem("token");
+    localStorage.clear();
     window.location.href = "index.html"; 
 }
 

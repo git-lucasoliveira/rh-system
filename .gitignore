@@ -1,0 +1,66 @@
+# ========== BACKEND (Java/Spring Boot) ==========
+
+# Compiled class files
+Backend/target/
+Backend/.mvn/
+Backend/mvnw
+Backend/mvnw.cmd
+*.class
+
+# Log files
+*.log
+
+# Package Files
+*.jar
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# IDE
+.idea/
+*.iml
+.vscode/
+*.iws
+*.ipr
+.project
+.classpath
+.settings/
+
+# Maven
+Backend/pom.xml.tag
+Backend/pom.xml.releaseBackup
+Backend/pom.xml.versionsBackup
+Backend/pom.xml.next
+Backend/release.properties
+Backend/dependency-reduced-pom.xml
+Backend/buildNumber.properties
+Backend/.mvn/timing.properties
+Backend/.mvn/wrapper/maven-wrapper.jar
+
+# ========== FRONTEND ==========
+
+# Dependencies
+node_modules/
+package-lock.json
+
+# ========== GERAL ==========
+
+# OS Files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Sensitive Information
+**/application-local.properties
+**/application-prod.properties
+*.env
+.env.local
+
+# Temporary files
+*.tmp
+*.swp
+*.bak
+*~

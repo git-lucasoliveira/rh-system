@@ -14,8 +14,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     const idEdicao = params.get('id');
 
     if (idEdicao) {
-        const titulo = document.querySelector('h3');
-        if(titulo) titulo.innerHTML = '<i class="bi bi-pencil-square text-warning"></i> Editar Colaborador';
+        const titulo = document.getElementById('titulo-pagina');
+        if(titulo) titulo.textContent = 'Editar Colaborador';
         await carregarDadosEdicao(idEdicao, token);
     }
 
@@ -85,6 +85,12 @@ async function carregarDadosEdicao(id, token) {
 
         if (func.setor) selecionarOpcao('setor', func.setor.id || func.setor);
         if (func.cargo) selecionarOpcao('cargo', func.cargo.id || func.cargo);
+        
+        // Converte Boolean (ativo) para String (ATIVO/INATIVO)
+        const statusSelect = document.getElementById('status');
+        if (statusSelect && func.ativo !== undefined) {
+            statusSelect.value = func.ativo ? 'ATIVO' : 'INATIVO';
+        }
 
         const btn = document.getElementById('btn-salvar');
         if(btn) btn.innerHTML = '<i class="bi bi-check-lg"></i> Atualizar Dados';
@@ -151,6 +157,7 @@ async function salvarFuncionario(event, idEdicao, token) {
         cpf: cpfInput.value,
         email: emailInput.value,
         dataAdmissao: document.getElementById('dataAdmissao').value,
+        ativo: document.getElementById('status').value === 'ATIVO', // Converte para Boolean
         setor: { id: document.getElementById('setor').value },
         cargo: { id: document.getElementById('cargo').value }
     };

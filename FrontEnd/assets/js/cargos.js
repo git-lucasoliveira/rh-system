@@ -7,16 +7,22 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 async function carregarCargos() {
-    const container = document.getElementById('conteudo-principal');
-    const statusMsg = document.getElementById('status-msg');
+    const container = document.getElementById('lista-cargos');
     
-    if(statusMsg) statusMsg.classList.remove('d-none');
-    if(container) container.innerHTML = "";
+    if (!container) {
+        console.error('Elemento lista-cargos não encontrado!');
+        return;
+    }
+
+    container.innerHTML = `
+        <div class="col-12 text-center py-5">
+            <div class="spinner-border text-primary" role="status"></div>
+            <p class="text-muted mt-3">Carregando cargos...</p>
+        </div>
+    `;
 
     try {
         const token = localStorage.getItem('token');
-        // Se o token não existir aqui, o fetch falha e tratamos no catch
-        
         const res = await fetch(`${API_URL}/cargos`, {
             headers: { 'Authorization': `Bearer ${token}` }
         });
@@ -24,22 +30,41 @@ async function carregarCargos() {
         if(!res.ok) throw new Error("Erro ao buscar cargos");
         
         const lista = await res.json();
-
-        if(statusMsg) statusMsg.classList.add('d-none');
         renderizarCargos(lista);
 
     } catch (error) {
         console.error(error);
-        if(statusMsg) statusMsg.innerHTML = `<p class="text-danger">Erro ao carregar: ${error.message}</p>`;
+        container.innerHTML = `
+            <div class="col-12">
+                <div class="alert alert-danger" role="alert">
+                    <i class="bi bi-exclamation-triangle me-2"></i>
+                    Erro ao carregar cargos. Tente novamente.
+                </div>
+            </div>
+        `;
     }
 }
 
 function renderizarCargos(lista) {
-    const container = document.getElementById('conteudo-principal');
+    const container = document.getElementById('lista-cargos');
+    
+    if (!container) return;
+    
     container.innerHTML = "";
     
     if(lista.length === 0) {
-        container.innerHTML = '<div class="col-12 text-center text-white opacity-50">Nenhum cargo cadastrado.</div>';
+        container.innerHTML = `
+            <div class="col-12">
+                <div class="card-dashboard p-5 text-center">
+                    <i class="bi bi-inbox display-1 text-muted mb-3"></i>
+                    <h4 class="text-white mb-2">Nenhum cargo cadastrado</h4>
+                    <p class="text-muted mb-4">Cadastre o primeiro cargo para começar.</p>
+                    <a href="cargo-form.html" class="btn btn-star-primary">
+                        <i class="bi bi-plus-lg me-2"></i>Cadastrar Cargo
+                    </a>
+                </div>
+            </div>
+        `;
         return;
     }
 

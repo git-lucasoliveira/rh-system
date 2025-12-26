@@ -1,76 +1,78 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Novo Usuário - StarPeople</title>
+    <title>Novo Usuário - LORHS</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/styles.css">
     <link rel="stylesheet" href="assets/css/components-extra.css">
     <link rel="stylesheet" href="assets/css/notifications.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎯</text></svg>">
 </head>
 <body>
-
     <div id="nav-placeholder"></div>
 
-    <div class="container mt-5">
-        <div class="row justify-content-center">
-            <div class="col-md-6">
+    <div class="container mt-4">
+        <div class="mb-4">
+            <h2 class="fw-bold text-white">
+                <i class="bi bi-person-plus me-2"></i>
+                <span id="titulo-pagina">Novo Usuário</span>
+            </h2>
+            <p class="text-muted mb-0">Preencha os dados da conta de acesso</p>
+        </div>
 
-                <div class="card card-dashboard p-4 border-0 shadow-lg">
-                    <h3 class="mb-4 text-center text-white" id="tituloFormulario">
-                        <i class="bi bi-shield-lock-fill text-warning"></i> Novo Acesso
-                    </h3>
+        <div class="card-dashboard p-4">
+            <form id="form-usuario">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label for="nome" class="form-label">Nome Completo *</label>
+                        <input type="text" class="form-control" id="nome" required>
+                    </div>
 
-                    <div id="msg-feedback" class="alert d-none" role="alert"></div>
+                    <div class="col-md-6">
+                        <label for="login" class="form-label">Login (usuário) *</label>
+                        <input type="text" class="form-control" id="login" required>
+                    </div>
 
-                    <form id="formUsuario">
-                        
-                        <input type="hidden" id="usuarioId">
+                    <div class="col-md-6">
+                        <label for="senha" class="form-label">Senha *</label>
+                        <input type="password" class="form-control" id="senha" required minlength="6">
+                        <small class="text-muted">Mínimo 6 caracteres</small>
+                    </div>
 
-                        <div class="mb-3">
-                            <label for="login" class="form-label">Login de Acesso</label>
-                            <input type="text" id="login" class="form-control" placeholder="Ex: joao.rh" required>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="senha" class="form-label">Senha</label>
-                            <input type="password" id="senha" class="form-control" placeholder="Digite a senha..." required>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="perfil" class="form-label">Perfil de Acesso</label>
-                            <select class="form-select" id="perfil" required>
-                                <option value="" disabled selected>Selecione um perfil...</option>
-                                <option value="SUPERADMIN">👑 Super Admin (Acesso Total)</option>
-                                <option value="TI">💻 Tecnologia (TI)</option>
-                                <option value="RH">👥 Recursos Humanos (RH)</option>
-                            </select>
-                        </div>
-
-                        <div class="d-flex gap-2 mt-4">
-                            <button type="submit" id="btn-salvar" class="btn btn-star-primary flex-fill">
-                                <i class="bi bi-check2-circle me-2"></i>
-                                Salvar Acesso
-                            </button>
-                            <a href="usuarios.html" class="btn btn-outline-secondary">Cancelar</a>
-                        </div>
-                    </form>
+                    <div class="col-md-6">
+                        <label for="role" class="form-label">Perfil de Acesso *</label>
+                        <select class="form-select" id="role" required>
+                            <option value="">Selecione...</option>
+                            <option value="SUPERADMIN">SuperAdmin</option>
+                            <option value="TI">TI (Tecnologia da Informação)</option>
+                            <option value="RH">RH (Recursos Humanos)</option>
+                        </select>
+                    </div>
                 </div>
 
-            </div>
+                <div class="d-flex gap-2 justify-content-end mt-4">
+                    <a href="usuarios.html" class="btn btn-outline-secondary">
+                        <i class="bi bi-x-lg me-2"></i>Cancelar
+                    </a>
+                    <button type="submit" class="btn btn-star-primary">
+                        <i class="bi bi-check-lg me-2"></i>Salvar
+                    </button>
+                </div>
+            </form>
         </div>
-        
+
         <footer class="text-center mt-5 py-4 text-muted border-top border-secondary border-opacity-10">
-            <small>&copy; 2025 Grupo Starbank</small>
+            <small class="text-white opacity-50">&copy; 2025 <strong>Lucas Oliveira</strong> | LORHS v2.0</small>
         </footer>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="assets/js/notifications.js"></script>
     <script src="assets/js/app.js"></script>
-    <script src="assets/js/usuarios.js"></script> 
+    <script src="assets/js/usuarios.js"></script>
 </body>
 </html>
